@@ -11,5 +11,9 @@
             <input type="file" name="imageFile">
             <input type="submit" value="Predict Image">
         </form>
+
+        {% if prediction %}
+            <p>Image is a {{prediction}}</p>
+        {% endif %}
     </body>
 </html>

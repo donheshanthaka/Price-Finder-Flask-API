@@ -6,9 +6,9 @@ class_names = ['Alto 2015', 'Hero Dash 2016', 'Toyota Aqua 2014', 'Wagon R Sting
 
 app = Flask(__name__)
 
-@app.route('/', methods=['GET'])
-def hello_world():
-    return render_template('index.html')
+# @app.route('/', methods=['GET'])
+# def hello_world():
+#     return render_template('index.html')
 
 @app.route('/', methods=['POST'])
 def predict():
@@ -21,7 +21,8 @@ def predict():
     pred_class = class_names[pred_prob.argmax()] # get the index with the highet prediction probability
     classification = (f"pred: {pred_class}, prob: {pred_prob.max():.2f}")
 
-    return render_template('index.html', prediction = classification) 
+    #return render_template('index.html', prediction = classification) 
+    return (classification) 
 
 # Create a function to load and prepare images
 def load_and_prep_image(filename, img_shape=224, scale=True):

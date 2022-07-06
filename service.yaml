@@ -1,0 +1,17 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: get-prediction
+spec:
+  template:
+    metadata:
+    spec:
+      containers:
+      - image: gcr.io/price-finder-test/get-prediction
+        resources:
+          limits:
+            # When setting a memory limit, the following minimum CPU limits are required:
+            #https://cloud.google.com/run/docs/configuring/memory-limits
+            cpu: '4'
+            memory: 2Gi
+      timeoutSeconds: 600

@@ -1,0 +1,4 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/test-deploy-355215/test-deploy', '.']
+images: ['gcr.io/test-deploy-355215/test-deploy']

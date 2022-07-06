@@ -27,8 +27,10 @@ jobs:
         id: auth
         uses: google-github-actions/auth@v0
         with:
-          workload_identity_provider: 'projects/297401672924/locations/global/workloadIdentityPools/my-pool/providers/my-provider'
-          service_account: 'github-test@test-deploy-355215.iam.gserviceaccount.com'
+          # Value recieved from step 7 in Setting up Workload Identity Federation
+          workload_identity_provider: 'projects/508866693626/locations/global/workloadIdentityPools/price-finder-test-pool/providers/price-finder-test-provider'
+          # Service account created from step 1 in Setting up Workload Identity Federation (can also be found in IAM & ADMIN -> Service Accounts)
+          service_account: 'test-service-account@price-finder-test.iam.gserviceaccount.com '
 
           # token_format: 'access_token'
           # access_token_lifetime: '300s'
@@ -48,7 +50,7 @@ jobs:
           # version: '286.0.0'
           # service_account_key: ${{ secrets.GCP_SA_KEY_JSON }}
           # service_account_email: "github-test@test-deploy-355215.iam.gserviceaccount.com"
-          project_id: test-deploy-355215
+          project_id: price-finder-test
 
       - name: Building
         run: |-

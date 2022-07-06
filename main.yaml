@@ -1,0 +1,70 @@
+# .github/workflows/deploy.yml
+
+name: github actions test
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+
+  deploy:
+    name: github actions test
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    steps:
+      
+      - name: Checkout
+        uses: actions/checkout@v3
+      
+      # Configure Workload Identity Federation via a credentials file.
+      - name: Authenticate to Google Cloud
+        id: auth
+        uses: google-github-actions/auth@v0
+        with:
+          workload_identity_provider: 'projects/297401672924/locations/global/workloadIdentityPools/my-pool/providers/my-provider'
+          service_account: 'github-test@test-deploy-355215.iam.gserviceaccount.com'
+
+          # token_format: 'access_token'
+          # access_token_lifetime: '300s'
+
+      #- name: Set up Cloud SDK
+
+      # - id: 'gcloud'
+      # name: 'gcloud'
+      # run: |-
+      #   gcloud secrets versions access "latest" --secret "my-secret"
+
+      # Build and push image to Google Container Registry
+
+      - name: Setting up
+        uses: google-github-actions/setup-gcloud@v0
+        with:
+          # version: '286.0.0'
+          # service_account_key: ${{ secrets.GCP_SA_KEY_JSON }}
+          # service_account_email: "github-test@test-deploy-355215.iam.gserviceaccount.com"
+          project_id: test-deploy-355215
+
+      - name: Building
+        run: |-
+          gcloud builds submit
+
+
+      # Setup gcloud CLI
+
+      - name: Deploy
+
+        uses: google-github-actions/deploy-cloudrun@v0
+
+        with:
+          #service: test-deploy
+          #image: gcr.io/test-deploy-355215/test-deploy
+          region: asia-south1
+          #credentials: ${{ secrets.GCP_SA_KEY_JSON }}
+          #project_id: test-deploy-355215
+          metadata: 'service.yaml'

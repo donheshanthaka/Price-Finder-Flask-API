@@ -58,7 +58,6 @@ jobs:
 
 
       # Setup gcloud CLI
-      #dum
 
       - name: Deploy
 

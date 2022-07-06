@@ -1,3 +1,5 @@
 images/*
 
 !images/.gitkeep
+
+README.md

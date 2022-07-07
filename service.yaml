@@ -2,9 +2,6 @@ apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
   name: get-prediction
-  annotations:
-    run.googleapis.com/ingress: all
-    run.googleapis.com/ingress-status: all
 spec:
   template:
     metadata:

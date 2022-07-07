@@ -1,5 +1,8 @@
 import tensorflow as tf
 from flask import Flask, render_template, request
+from werkzeug.utils import secure_filename
+import imghdr
+import os
 
 loaded_model_1 = tf.keras.models.load_model('model/feature_extraction_efficientnetB1')
 class_names = ['Alto 2015', 'Hero Dash 2016', 'Toyota Aqua 2014', 'Wagon R Stingray 2018']
@@ -13,7 +16,11 @@ app = Flask(__name__)
 @app.route('/', methods=['POST'])
 def predict():
     image_file = request.files['imageFile']
-    image_path = './images/' + image_file.filename
+    print(imghdr.what(image_file))
+    image_type = imghdr.what(image_file)
+    if (image_type != 'jpeg' and image_type != 'png'):
+      return 'File type not supported!'
+    image_path = './images/' + secure_filename(image_file.filename)
     image_file.save(image_path)
     
     img = load_and_prep_image(image_path, scale=False)

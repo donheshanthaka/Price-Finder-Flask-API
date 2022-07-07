@@ -1,5 +1,11 @@
 images/*
-
 !images/.gitkeep
+README.md
 
 README.md
+*.pyc
+*.pyo
+*.pyd
+__pycache__
+.pytest_cache
+.idea

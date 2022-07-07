@@ -28,6 +28,7 @@ def predict():
     pred_class = class_names[pred_prob.argmax()] # get the index with the highet prediction probability
     classification = (f"pred: {pred_class}, prob: {pred_prob.max():.2f}")
 
+    os.remove(image_path)
     #return render_template('index.html', prediction = classification) 
     return (classification) 
 

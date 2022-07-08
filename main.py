@@ -1,5 +1,5 @@
 import tensorflow as tf
-from flask import Flask, render_template, request
+from flask import Flask, request
 from werkzeug.utils import secure_filename
 import os
 import requests
@@ -10,15 +10,11 @@ class_names = ['Alto 2015', 'Hero Dash 2016', 'Toyota Aqua 2014', 'Wagon R Sting
 
 app = Flask(__name__)
 
-# @app.route('/', methods=['GET'])
-# def hello_world():
-#     return render_template('index.html')
-
 @app.route('/', methods=['POST'])
 def predict():
     image_file = request.files['imageFile']
     image_type = secure_filename(image_file.filename).split('.')[1]
-    print(image_type)
+    # print(image_type)
     if (image_type != 'jpeg' and image_type != 'png'):
       return 'File type not supported!'
     image_path = './images/' + secure_filename(image_file.filename)
@@ -30,7 +26,7 @@ def predict():
     # classification = (f"pred: {pred_class}, prob: {pred_prob.max():.2f}")
 
     os.remove(image_path)
-    #return render_template('index.html', prediction = classification) 
+ 
     return (pred_class)
 
 # Create a function to load and prepare images

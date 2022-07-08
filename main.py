@@ -93,7 +93,8 @@ def get_price():
       total_price += int(''.join(filter(str.isdigit, extracted_price)))
 
   average_price = total_price // len(tag)
-  return str(average_price)
+  average_price = "RS. " + "{:,}".format(average_price)
+  return average_price
 
 if __name__ == '__main__':
     app.run(port=3000, debug=True)

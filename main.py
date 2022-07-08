@@ -1,10 +1,9 @@
-from numpy import average
 import tensorflow as tf
 from flask import Flask, render_template, request
 from werkzeug.utils import secure_filename
 import os
 import requests
-from bs4 import  BeautifulSoup
+from bs4 import BeautifulSoup
 
 #loaded_model_1 = tf.keras.models.load_model('model/feature_extraction_efficientnetB1')
 #class_names = ['Alto 2015', 'Hero Dash 2016', 'Toyota Aqua 2014', 'Wagon R Stingray 2018']

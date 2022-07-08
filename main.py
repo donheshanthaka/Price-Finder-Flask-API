@@ -1,3 +1,5 @@
+from crypt import methods
+from pickle import GET
 import tensorflow as tf
 from flask import Flask, render_template, request
 from werkzeug.utils import secure_filename
@@ -60,6 +62,12 @@ def load_and_prep_image(filename, img_shape=224, scale=True):
     return img/255.
   else:
     return img # don't need to rescale images for EfficientNet models in TensorFlow
+
+
+@app.route('/price', methods=['GET'])
+def get_price():
+  prediction = request.args['vehicle']
+  return prediction
 
 if __name__ == '__main__':
     app.run(port=3000, debug=True)

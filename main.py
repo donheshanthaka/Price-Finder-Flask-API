@@ -1,33 +1,33 @@
 import tensorflow as tf
-from flask import Flask, request
+from flask import Flask, jsonify, request
 from werkzeug.utils import secure_filename
 import os
 import requests
 from bs4 import BeautifulSoup
 
-loaded_model_1 = tf.keras.models.load_model('model/feature_extraction_efficientnetB1')
-class_names = ['Alto 2015', 'Hero Dash 2016', 'Toyota Aqua 2014', 'Wagon R Stingray 2018']
+# loaded_model_1 = tf.keras.models.load_model('model/feature_extraction_efficientnetB1')
+# class_names = ['Alto 2015', 'Hero Dash 2016', 'Toyota Aqua 2014', 'Wagon R Stingray 2018']
 
 app = Flask(__name__)
 
-@app.route('/', methods=['POST'])
-def predict():
-    image_file = request.files['imageFile']
-    image_type = secure_filename(image_file.filename).split('.')[1]
-    # print(image_type)
-    if (image_type != 'jpeg' and image_type != 'png'):
-      return 'File type not supported!'
-    image_path = './images/' + secure_filename(image_file.filename)
-    image_file.save(image_path)
+# @app.route('/', methods=['POST'])
+# def predict():
+#     image_file = request.files['imageFile']
+#     image_type = secure_filename(image_file.filename).split('.')[1]
+#     # print(image_type)
+#     if (image_type != 'jpeg' and image_type != 'png' and image_type != 'jpg'):
+#       return 'File type not supported!'
+#     image_path = './images/' + secure_filename(image_file.filename)
+#     image_file.save(image_path)
     
-    img = load_and_prep_image(image_path, scale=False)
-    pred_prob = loaded_model_1.predict(tf.expand_dims(img, axis=0), verbose=0) # make prediction on image with shape [1, 224, 224, 3] (same shape as model was trained on)
-    pred_class = class_names[pred_prob.argmax()] # get the index with the highet prediction probability
-    # classification = (f"pred: {pred_class}, prob: {pred_prob.max():.2f}")
+#     img = load_and_prep_image(image_path, scale=False)
+#     pred_prob = loaded_model_1.predict(tf.expand_dims(img, axis=0), verbose=0) # make prediction on image with shape [1, 224, 224, 3] (same shape as model was trained on)
+#     pred_class = class_names[pred_prob.argmax()] # get the index with the highet prediction probability
+#     # classification = (f"pred: {pred_class}, prob: {pred_prob.max():.2f}")
 
-    os.remove(image_path)
+#     os.remove(image_path)
  
-    return (pred_class)
+#     return (pred_class)
 
 # Create a function to load and prepare images
 def load_and_prep_image(filename, img_shape=224, scale=True):
@@ -91,5 +91,13 @@ def get_price():
   average_price = "RS. " + "{:,}".format(average_price)
   return average_price
 
+@app.route('/test', methods=['GET', 'POST'])
+def test():
+  data = {"vehicle" : "Wagon R", "price" : "Rs. 6,500,000"}
+  return jsonify(data)
+
 if __name__ == '__main__':
-    app.run(port=3000, debug=True)
+    app.run(host="0.0.0.0" ,port=8000, debug=True) # When using the android emulator
+    #app.run() # For production
+
+

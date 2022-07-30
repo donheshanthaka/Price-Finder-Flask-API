@@ -97,12 +97,33 @@ def test():
   image_file = request.files['imageFile']
   image_type = secure_filename(image_file.filename).split('.')[1]
   if (image_type != 'jpeg' and image_type != 'png'):
-    response = {"error": "Invalid Image Type"}
+    #response = {"error": "Invalid Image Type"}
     # Return a 415 (Unsupported Media Type) http status code
-    return jsonify(response), 415
+    #return jsonify(response), 415
+    raise InvalidImageType("Invalid Image Type", status_code=415)
       # return 'File type not supported!'
   data = {"model": "Wagon R", "price": "Rs. 6,500,000"}
   return jsonify(data)
+
+
+
+class InvalidImageType(Exception):
+  status_code = 400
+
+  def __init__(self, message, status_code=None):
+    super().__init__()
+    self.message = message
+    if status_code is not None:
+      self.status_code = status_code
+
+  def to_dict(self):
+    rv = dict()
+    rv['message'] = self.message
+    return rv
+
+@app.errorhandler(InvalidImageType)
+def invalid_image_type(e):
+  return jsonify(e.to_dict()), e.status_code
 
 
 if __name__ == '__main__':

@@ -91,13 +91,21 @@ def get_price():
   average_price = "RS. " + "{:,}".format(average_price)
   return average_price
 
+
 @app.route('/test', methods=['GET', 'POST'])
 def test():
-  data = {"vehicle" : "Wagon R", "price" : "Rs. 6,500,000"}
+  image_file = request.files['imageFile']
+  image_type = secure_filename(image_file.filename).split('.')[1]
+  if (image_type != 'jpeg' and image_type != 'png'):
+    response = {"error": "Invalid Image Type"}
+    # Return a 415 (Unsupported Media Type) http status code
+    return jsonify(response), 415
+      # return 'File type not supported!'
+  data = {"model": "Wagon R", "price": "Rs. 6,500,000"}
   return jsonify(data)
 
+
 if __name__ == '__main__':
-    app.run(host="0.0.0.0" ,port=8000, debug=True) # When using the android emulator
+    # When using the android emulator
+    app.run(host="0.0.0.0", port=8000, debug=True)
     #app.run() # For production
-
-

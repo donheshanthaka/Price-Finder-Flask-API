@@ -82,7 +82,8 @@ def get_price():
     #print(len(tag))
 
     if (len(tag) < 1):
-      raise WebScrapperUrlError("Unable to access price retrieval web server", status_code=502)
+      # Return a 204 (No Content) http status code
+      raise WebScrapperUrlError("No active advertisements found for the current model", status_code=204)
 
     # Iterates through the list of elements and extracting the price span tag
     total_price = 0

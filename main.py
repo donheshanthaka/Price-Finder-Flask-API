@@ -83,7 +83,7 @@ def get_price():
 
     if (len(tag) < 1):
       # Return a 204 (No Content) http status code
-      raise WebScrapperUrlError("No active advertisements found for the current model", status_code=204)
+      raise NoActiveListingsFound
 
     # Iterates through the list of elements and extracting the price span tag
     total_price = 0
@@ -97,7 +97,7 @@ def get_price():
     return average_price
   # Return a 502 (Bad Gateway) http status code
   except requests.exceptions.ConnectionError:
-    raise WebScrapperUrlError("Unable to access price retrieval web server", status_code=502)
+    raise WebScraperUrlError
 
 
 @app.route('/test', methods=['GET', 'POST'])
@@ -112,27 +112,42 @@ def test():
   return jsonify(data)
 
 
-class WebScrapperUrlError(Exception):
-  status_code = 502
+# class WebScrapperUrlError(Exception):
+#   status_code = 502
 
-  def __init__(self, message, status_code=None):
-    super().__init__()
-    self.message = message
-    if status_code is not None:
-      self.status_code = status_code
+#   def __init__(self, message, status_code=None):
+#     super().__init__()
+#     self.message = message
+#     if status_code is not None:
+#       self.status_code = status_code
 
-  def to_dict(self):
-    rv = dict()
-    rv['message'] = self.message
-    return rv
+#   def to_dict(self):
+#     rv = dict()
+#     rv['message'] = self.message
+#     return rv
 
-@app.errorhandler(WebScrapperUrlError)
-def web_scrapper_url_error(e):
-  return jsonify(e.to_dict()), e.status_code
+# @app.errorhandler(WebScrapperUrlError)
+# def web_scrapper_url_error(e):
+#   return jsonify(e.to_dict()), e.status_code
 
+class NoActiveListingsFound(Exception):
+  pass
+
+@app.errorhandler(NoActiveListingsFound)
+def no_active_listing_found(e):
+  """Return a 204 (No Content) http status code with the error message (No active advertisements found for the current vehicle model)"""
+  return {'message': 'No active advertisements found for the current vehicle model'}, 204
+
+class WebScraperUrlError(Exception):
+  pass
+
+@app.errorhandler(WebScraperUrlError)
+def web_scraper_url_error(e):
+    """Return a 502 (Bad Gateway) http status code with the error message (Unable to access price retrieval web server)"""
+    return {'message': 'Unable to access price retrieval web server'}, 502
 
 class InvalidImageType(Exception):
-    pass
+  pass
 
 @app.errorhandler(InvalidImageType)
 def invalid_image_type(e):

@@ -70,26 +70,33 @@ def get_price():
 
   url = f"https://ikman.lk/en/ads/sri-lanka/cars?sort=relevance&buy_now=0&urgent=0&query={model}&page=1&numeric.model_year.minimum={year}"
 
-  # Making a http request to get the required webpage
-  result = requests.get(url)
+  try:
+    # Making a http request to get the required webpage
+    result = requests.get(url)
 
-  doc = BeautifulSoup(result.text, "html.parser")
+    doc = BeautifulSoup(result.text, "html.parser")
 
-  # Extracting the tag that contains the price details
-  # find_all returns a set of elements that contains all the prices from the page
-  tag = doc.find_all( class_ ="price--3SnqI color--t0tGX")
-  print(len(tag))
+    # Extracting the tag that contains the price details
+    # find_all returns a set of elements that contains all the prices from the page
+    tag = doc.find_all( class_ ="price--3SnqI color--t0tGX")
+    #print(len(tag))
 
-  # Iterates through the list of elements and extracting the price span tag
-  total_price = 0
-  for spans in tag:
-      extracted_price = spans.find("span").string
-      # Filtering the string to get the price in integer value
-      total_price += int(''.join(filter(str.isdigit, extracted_price)))
+    if (len(tag) < 1):
+      raise WebScrapperUrlError("Unable to access price retrieval web server", status_code=502)
 
-  average_price = total_price // len(tag)
-  average_price = "RS. " + "{:,}".format(average_price)
-  return average_price
+    # Iterates through the list of elements and extracting the price span tag
+    total_price = 0
+    for spans in tag:
+        extracted_price = spans.find("span").string
+        # Filtering the string to get the price in integer value
+        total_price += int(''.join(filter(str.isdigit, extracted_price)))
+
+    average_price = total_price // len(tag)
+    average_price = "RS. " + "{:,}".format(average_price)
+    return average_price
+  # Return a 502 (Bad Gateway) http status code
+  except requests.exceptions.ConnectionError:
+    raise WebScrapperUrlError("Unable to access price retrieval web server", status_code=502)
 
 
 @app.route('/test', methods=['GET', 'POST'])
@@ -105,6 +112,24 @@ def test():
   data = {"model": "Wagon R", "price": "Rs. 6,500,000"}
   return jsonify(data)
 
+
+class WebScrapperUrlError(Exception):
+  status_code = 502
+
+  def __init__(self, message, status_code=None):
+    super().__init__()
+    self.message = message
+    if status_code is not None:
+      self.status_code = status_code
+
+  def to_dict(self):
+    rv = dict()
+    rv['message'] = self.message
+    return rv
+
+@app.errorhandler(WebScrapperUrlError)
+def web_scrapper_url_error(e):
+  return jsonify(e.to_dict()), e.status_code
 
 
 class InvalidImageType(Exception):

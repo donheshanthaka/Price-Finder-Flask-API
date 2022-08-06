@@ -5,29 +5,37 @@ import os
 import requests
 from bs4 import BeautifulSoup
 
-# loaded_model_1 = tf.keras.models.load_model('model/feature_extraction_efficientnetB1')
-# class_names = ['Alto 2015', 'Hero Dash 2016', 'Toyota Aqua 2014', 'Wagon R Stingray 2018']
+loaded_model_1 = tf.keras.models.load_model('model/feature_extraction_efficientnetB1')
+class_names = ['Alto 2015', 'Hero Dash 2016', 'Toyota Aqua 2014', 'Wagon R Stingray 2018']
 
 app = Flask(__name__)
 
-# @app.route('/', methods=['POST'])
-# def predict():
-#     image_file = request.files['imageFile']
-#     image_type = secure_filename(image_file.filename).split('.')[1]
-#     # print(image_type)
-#     if (image_type != 'jpeg' and image_type != 'png' and image_type != 'jpg'):
-#       return 'File type not supported!'
-#     image_path = './images/' + secure_filename(image_file.filename)
-#     image_file.save(image_path)
-    
-#     img = load_and_prep_image(image_path, scale=False)
-#     pred_prob = loaded_model_1.predict(tf.expand_dims(img, axis=0), verbose=0) # make prediction on image with shape [1, 224, 224, 3] (same shape as model was trained on)
-#     pred_class = class_names[pred_prob.argmax()] # get the index with the highet prediction probability
-#     # classification = (f"pred: {pred_class}, prob: {pred_prob.max():.2f}")
 
-#     os.remove(image_path)
- 
-#     return (pred_class)
+@app.route('/', methods=['POST'])
+def predict():
+    prediction = {}
+    image_file = request.files['imageFile']
+    image_type = secure_filename(image_file.filename).split('.')[1]
+    # print(image_type)
+    if (image_type != 'jpeg' and image_type != 'png' and image_type != 'jpg'):
+      return 'File type not supported!'
+    image_path = './images/' + secure_filename(image_file.filename)
+    image_file.save(image_path)
+
+    img = load_and_prep_image(image_path, scale=False)
+    # make prediction on image with shape [1, 224, 224, 3] (same shape as model was trained on)
+    pred_prob = loaded_model_1.predict(tf.expand_dims(img, axis=0), verbose=0)
+    # get the index with the highet prediction probability
+    pred_class = class_names[pred_prob.argmax()]
+    # classification = (f"pred: {pred_class}, prob: {pred_prob.max():.2f}")
+
+    os.remove(image_path)
+
+    prediction['model'] = pred_class
+
+    prediction['price'] = get_price(pred_class)
+
+    return (prediction)
 
 # Create a function to load and prepare images
 def load_and_prep_image(filename, img_shape=224, scale=True):
@@ -60,15 +68,15 @@ def load_and_prep_image(filename, img_shape=224, scale=True):
     return img # don't need to rescale images for EfficientNet models in TensorFlow
 
 
-@app.route('/price', methods=['GET'])
-def get_price():
-  prediction = request.args['vehicle']
+# @app.route('/price', methods=['GET'])
+def get_price(pred):
+  prediction = pred
   # Extract the model name from the prediction and add '%20' for the white spaces to be used in the url
   model = '%20'.join([str(s) for s in prediction.split() if s.isalpha()])
   # Extract the model year from the prediction
   year = str([int(s) for s in prediction.split() if s.isdigit()][0])
 
-  url = f"https://ikman.lk/en/ads/sri-lanka/cars?sort=relevance&buy_now=0&urgent=0&query={model}&page=1&numeric.model_year.minimum={year}"
+  url = f"https://ikman.lk/en/ads/sri-lanka/cars?sort=relevance&buy_now=0&urgent=0&query={model}&page=1&numeric.model_year.minimum={year}&numeric.model_year.maximum={year}"
 
   try:
     # Making a http request to get the required webpage
@@ -99,9 +107,14 @@ def get_price():
   except requests.exceptions.ConnectionError:
     raise WebScraperUrlError
 
+  # Return a 502 (Bad Gateway) http status code
+  except requests.exceptions.InvalidURL:
+    raise WebScraperUrlError
+
 
 @app.route('/test', methods=['GET', 'POST'])
 def test():
+  print('Called')
   image_file = request.files['imageFile']
   image_type = secure_filename(image_file.filename).split('.')[1]
   if (image_type != 'jpeg' and image_type != 'png'):
@@ -151,7 +164,7 @@ class InvalidImageType(Exception):
 
 @app.errorhandler(InvalidImageType)
 def invalid_image_type(e):
-    """Return a 415 (Unsupported Media Type) http status code with the error message (Invalid Image Type)"""
+    """Return a 415 (Unsupported Media Type) http status code with the error message (Invalid Image Type)"""  
     return {'message': 'Invalid Image Type'}, 415
 
 

@@ -169,6 +169,6 @@ def invalid_image_type(e):
 
 
 if __name__ == '__main__':
-    # When using the android emulator
-    app.run(host="0.0.0.0", port=8000, debug=True)
-    #app.run() # For production
+    # When using the android emulatorr
+    # app.run(host="0.0.0.0", port=8000, debug=True)
+    app.run() # For production

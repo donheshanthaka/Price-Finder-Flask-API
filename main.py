@@ -16,9 +16,9 @@ def predict():
     prediction = {}
     image_file = request.files['imageFile']
     image_type = secure_filename(image_file.filename).split('.')[1]
-    # print(image_type)
     if (image_type != 'jpeg' and image_type != 'png' and image_type != 'jpg'):
-      return 'File type not supported!'
+      # Return a 415 (Unsupported Media Type) http status code
+      raise InvalidImageType
     image_path = './images/' + secure_filename(image_file.filename)
     image_file.save(image_path)
 

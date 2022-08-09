@@ -1,4 +1,21 @@
+# steps:
+# - name: 'gcr.io/cloud-builders/docker'
+#   args: ['build', '-t', 'gcr.io/price-finder-test/get-prediction', '.']
+# images: ['gcr.io/price-finder-test/get-prediction']
+
+
+
+
 steps:
+# Build the container image
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'gcr.io/price-finder-test/get-prediction', '.']
-images: ['gcr.io/price-finder-test/get-prediction']
+  args: ['build', '-t', 'gcr.io/gcr.io/price-finder-test/get-prediction', '.']
+# Push the container image to Container Registry
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/gcr.io/price-finder-test/get-prediction']
+# Deploy container image to Cloud Run
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: gcloud
+  args: ['run', 'deploy', 'get-prediction', '--image', 'gcr.io/gcr.io/price-finder-test/get-prediction', '--region', 'asia-south1']
+images:
+- gcr.io/gcr.io/price-finder-test/get-prediction

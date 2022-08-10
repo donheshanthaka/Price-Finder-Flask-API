@@ -7,6 +7,11 @@ on:
     branches:
       - main
 
+env:
+  PROJECT_ID: price-finder-test
+  SERVICE: get-prediction
+  REGION: asia-south1
+
 jobs:
 
   deploy:
@@ -49,7 +54,7 @@ jobs:
           # version: '286.0.0'
           # service_account_key: ${{ secrets.GCP_SA_KEY_JSON }}
           # service_account_email: "github-test@test-deploy-355215.iam.gserviceaccount.com"
-          project_id: price-finder-test
+          project_id: ${{ env.PROJECT_ID }}
 
       - name: Building
         run: |-
@@ -63,9 +68,9 @@ jobs:
         uses: google-github-actions/deploy-cloudrun@v0
 
         with:
-          #service: test-deploy
-          #image: gcr.io/test-deploy-355215/test-deploy
-          region: asia-south1
+          service: ${{ env.SERVICE }}
+          region: ${{ env.REGION }}
+          image: gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}
           #credentials: ${{ secrets.GCP_SA_KEY_JSON }}
           #project_id: test-deploy-355215
-          metadata: 'service.yaml'
+          # metadata: 'service.yaml'

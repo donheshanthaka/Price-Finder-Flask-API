@@ -1,7 +1,18 @@
 import tensorflow as tf
 
+loaded_model_1 = tf.keras.models.load_model('model/feature_extraction_efficientnetB1')
+class_names = ['Alto 2015', 'Hero Dash 2016', 'Toyota Aqua 2014', 'Wagon R Stingray 2018']
 
 
+def predict(image_path):
+    img = load_and_prep_image(image_path, scale=False)
+    # make prediction on image with shape [1, 224, 224, 3] (same shape as model was trained on)
+    pred_prob = loaded_model_1.predict(tf.expand_dims(img, axis=0), verbose=0)
+    # get the index with the highet prediction probability
+    pred_class = class_names[pred_prob.argmax()]
+    # classification = (f"pred: {pred_class}, prob: {pred_prob.max():.2f}")
+
+    return pred_class
 
 
 def load_and_prep_image(filename, img_shape=224, scale=True):

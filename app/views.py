@@ -1,12 +1,11 @@
-import tensorflow as tf
-from flask import Flask, jsonify, request
+from flask import jsonify, request
 from werkzeug.utils import secure_filename
 import os
 import requests
 from bs4 import BeautifulSoup
 from app import error_handlers
 from app import app
-from app.helpers import load_and_prep_image
+from app.helpers import predict
 
 @app.route('/test', methods=['GET', 'POST'])
 def test():
@@ -21,12 +20,9 @@ def test():
   return jsonify(data)
 
 
-loaded_model_1 = tf.keras.models.load_model('model/feature_extraction_efficientnetB1')
-class_names = ['Alto 2015', 'Hero Dash 2016', 'Toyota Aqua 2014', 'Wagon R Stingray 2018']
-
 
 @app.route('/', methods=['POST'])
-def predict():
+def get_vehicle():
     prediction = {}
     image_file = request.files['imageFile']
     image_type = secure_filename(image_file.filename).split('.')[1]
@@ -36,21 +32,15 @@ def predict():
     image_path = './images/' + secure_filename(image_file.filename)
     image_file.save(image_path)
 
-    img = load_and_prep_image(image_path, scale=False)
-    # make prediction on image with shape [1, 224, 224, 3] (same shape as model was trained on)
-    pred_prob = loaded_model_1.predict(tf.expand_dims(img, axis=0), verbose=0)
-    # get the index with the highet prediction probability
-    pred_class = class_names[pred_prob.argmax()]
-    # classification = (f"pred: {pred_class}, prob: {pred_prob.max():.2f}")
+    vehicle = predict(image_path)
+
+    prediction['model'] = vehicle
 
     os.remove(image_path)
 
-    prediction['model'] = pred_class
-
-    prediction['price'] = get_price(pred_class)
+    prediction['price'] = get_price(vehicle)
 
     return (prediction)
-
 
 
 

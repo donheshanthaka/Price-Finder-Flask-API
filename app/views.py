@@ -4,7 +4,7 @@ from werkzeug.utils import secure_filename
 import os
 import requests
 from bs4 import BeautifulSoup
-
+from app import error_handlers
 from app import app
 
 @app.route('/test', methods=['GET', 'POST'])
@@ -14,36 +14,10 @@ def test():
   image_type = secure_filename(image_file.filename).split('.')[1]
   if (image_type != 'jpeg' and image_type != 'png'):
     # Return a 415 (Unsupported Media Type) http status code
-    raise InvalidImageType
+    raise error_handlers.invalid_image_type
       # return 'File type not supported!'
   data = {"model": "Wagon R", "price": "Rs. 6,500,000"}
   return jsonify(data)
-
-class NoActiveListingsFound(Exception):
-  pass
-
-@app.errorhandler(NoActiveListingsFound)
-def no_active_listing_found(e):
-  """Return a 204 (No Content) http status code with the error message (No active advertisements found for the current vehicle model)"""
-  return {'message': 'No active advertisements found for the current vehicle model'}, 204
-
-class WebScraperUrlError(Exception):
-  pass
-
-@app.errorhandler(WebScraperUrlError)
-def web_scraper_url_error(e):
-    """Return a 502 (Bad Gateway) http status code with the error message (Unable to access price retrieval web server)"""
-    return {'message': 'Unable to access price retrieval web server'}, 502
-
-class InvalidImageType(Exception):
-  pass
-
-@app.errorhandler(InvalidImageType)
-def invalid_image_type(e):
-    """Return a 415 (Unsupported Media Type) http status code with the error message (Invalid Image Type)"""  
-    return {'message': 'Invalid Image Type'}, 415
-
-
 
 
 loaded_model_1 = tf.keras.models.load_model('model/feature_extraction_efficientnetB1')
@@ -57,7 +31,7 @@ def predict():
     image_type = secure_filename(image_file.filename).split('.')[1]
     if (image_type != 'jpeg' and image_type != 'png' and image_type != 'jpg'):
       # Return a 415 (Unsupported Media Type) http status code
-      raise InvalidImageType
+      raise error_handlers.InvalidImageType
     image_path = './images/' + secure_filename(image_file.filename)
     image_file.save(image_path)
 
@@ -130,7 +104,7 @@ def get_price(pred):
 
     if (len(tag) < 1):
       # Return a 204 (No Content) http status code
-      raise NoActiveListingsFound
+      raise error_handlers.NoActiveListingsFound
 
     # Iterates through the list of elements and extracting the price span tag
     total_price = 0
@@ -144,8 +118,8 @@ def get_price(pred):
     return average_price
   # Return a 502 (Bad Gateway) http status code
   except requests.exceptions.ConnectionError:
-    raise WebScraperUrlError
+    raise error_handlers.WebScraperUrlError
 
   # Return a 502 (Bad Gateway) http status code
   except requests.exceptions.InvalidURL:
-    raise WebScraperUrlError
+    raise error_handlers.WebScraperUrlError

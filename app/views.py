@@ -1,6 +1,8 @@
+from fileinput import filename
 from flask import jsonify, request
 from werkzeug.utils import secure_filename
 import os
+import uuid
 import requests
 from bs4 import BeautifulSoup
 from app import error_handlers
@@ -29,7 +31,10 @@ def get_vehicle():
     if (image_type != 'jpeg' and image_type != 'png' and image_type != 'jpg'):
       # Return a 415 (Unsupported Media Type) http status code
       raise error_handlers.InvalidImageType
-    image_path = './images/' + secure_filename(image_file.filename)
+    # Create a unique id for the filename
+    uid = str(uuid.uuid4())    
+    filename = uid + secure_filename(image_file.filename)
+    image_path = './images/' + filename
     image_file.save(image_path)
 
     vehicle = predict(image_path)

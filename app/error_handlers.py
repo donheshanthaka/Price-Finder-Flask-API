@@ -1,4 +1,6 @@
-from app import app
+from app import create_app
+
+app = create_app()
 
 class NoActiveListingsFound(Exception):
   pass

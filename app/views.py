@@ -6,8 +6,10 @@ import uuid
 import requests
 from bs4 import BeautifulSoup
 from app import error_handlers
-from app import app
+from app import create_app
 from app.helpers import predict
+
+app = create_app()
 
 @app.route('/test', methods=['GET', 'POST'])
 def test():

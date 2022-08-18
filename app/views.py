@@ -3,10 +3,9 @@ from flask import jsonify, request, Blueprint
 from werkzeug.utils import secure_filename
 import os
 import uuid
-import requests
-from bs4 import BeautifulSoup
+
 from app import error_handlers
-from app.helpers import predict
+from app.helpers import predict, get_price
 
 views = Blueprint("views", __name__)
 
@@ -49,46 +48,3 @@ def get_vehicle():
     return (prediction)
 
 
-
-# @app.route('/price', methods=['GET'])
-def get_price(pred):
-  prediction = pred
-  # Extract the model name from the prediction and add '%20' for the white spaces to be used in the url
-  model = '%20'.join([str(s) for s in prediction.split() if s.isalpha()])
-  # Extract the model year from the prediction
-  year = str([int(s) for s in prediction.split() if s.isdigit()][0])
-
-  url = f"https://ikman.lk/en/ads/sri-lanka/cars?sort=relevance&buy_now=0&urgent=0&query={model}&page=1&numeric.model_year.minimum={year}&numeric.model_year.maximum={year}"
-
-  try:
-    # Making a http request to get the required webpage
-    result = requests.get(url)
-
-    doc = BeautifulSoup(result.text, "html.parser")
-
-    # Extracting the tag that contains the price details
-    # find_all returns a set of elements that contains all the prices from the page
-    tag = doc.find_all( class_ ="price--3SnqI color--t0tGX")
-    #print(len(tag))
-
-    if (len(tag) < 1):
-      # Return a 204 (No Content) http status code
-      raise error_handlers.NoActiveListingsFound
-
-    # Iterates through the list of elements and extracting the price span tag
-    total_price = 0
-    for spans in tag:
-        extracted_price = spans.find("span").string
-        # Filtering the string to get the price in integer value
-        total_price += int(''.join(filter(str.isdigit, extracted_price)))
-
-    average_price = total_price // len(tag)
-    average_price = "RS. " + "{:,}".format(average_price)
-    return average_price
-  # Return a 502 (Bad Gateway) http status code
-  except requests.exceptions.ConnectionError:
-    raise error_handlers.WebScraperUrlError
-
-  # Return a 502 (Bad Gateway) http status code
-  except requests.exceptions.InvalidURL:
-    raise error_handlers.WebScraperUrlError

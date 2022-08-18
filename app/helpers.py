@@ -9,7 +9,7 @@ class_names = ['Alto 2015', 'Hero Dash 2016', 'Toyota Aqua 2014', 'Wagon R Sting
 
 
 def predict(image_path):
-    img = load_and_prep_image(image_path, scale=False)
+    img = reshape_image(image_path, scale=False)
     # make prediction on image with shape [1, 224, 224, 3] (same shape as model was trained on)
     pred_prob = loaded_model_1.predict(tf.expand_dims(img, axis=0), verbose=0)
     # get the index with the highet prediction probability
@@ -19,7 +19,7 @@ def predict(image_path):
     return pred_class
 
 
-def load_and_prep_image(filename, img_shape=224, scale=True):
+def reshape_image(filename, img_shape=224, scale=True):
   """
   Reads in an image from filename, turns it into a tensor and reshapes into
   specified shape (img_shape, img_shape, color_channels=3).

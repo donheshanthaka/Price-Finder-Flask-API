@@ -18,7 +18,7 @@ def test_load_and_prep_image():
     WHEN trying to predict the imnage
     THEN check the returned image tensor is in correct shape
     """
-    img = helpers.load_and_prep_image(image_path, scale=False)
+    img = helpers.reshape_image(image_path, scale=False)
     assert img.shape == (224, 224, 3)
 
 

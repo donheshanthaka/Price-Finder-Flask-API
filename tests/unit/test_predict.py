@@ -1,4 +1,3 @@
-import string
 from app import helpers
 
 image_path = "tests/images/1.jpeg"
@@ -23,11 +22,3 @@ def test_load_and_prep_image():
     assert img.shape == (224, 224, 3)
 
 
-def test_get_price():
-    """
-    GIVEN a name of a vehicle
-    WHEN trying to find the current market price
-    THEN check the returned value is a string (cannot check for an exact value since market value is not constant, therefore checking the return type is the only option)
-    """
-    price = helpers.get_price("Toyota Aqua 2014")
-    assert type(price) == str

@@ -1,17 +1,16 @@
-from fileinput import filename
-from flask import jsonify, request
+# from fileinput import filename
+from flask import jsonify, request, Blueprint
 from werkzeug.utils import secure_filename
 import os
 import uuid
 import requests
 from bs4 import BeautifulSoup
 from app import error_handlers
-from app import create_app
 from app.helpers import predict
 
-app = create_app()
+views = Blueprint("views", __name__)
 
-@app.route('/test', methods=['GET', 'POST'])
+@views.route('/test', methods=['GET', 'POST'])
 def test():
   print('Called')
   image_file = request.files['imageFile']
@@ -25,7 +24,7 @@ def test():
 
 
 
-@app.route('/', methods=['POST'])
+@views.route('/', methods=['POST'])
 def get_vehicle():
     prediction = {}
     image_file = request.files['imageFile']

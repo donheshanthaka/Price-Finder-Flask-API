@@ -1,4 +1,5 @@
 from flask import Flask
+from app.views import views
 
 def create_app():
 
@@ -14,7 +15,6 @@ def create_app():
     else:
         app.config.from_object("config.ProductionConfig")
 
-
-    from app import views
+    app.register_blueprint(views)
 
     return app

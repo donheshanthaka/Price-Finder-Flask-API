@@ -23,7 +23,7 @@ def test():
 
 
 
-@views.route('/', methods=['POST'])
+@views.route('/get-vehicle-info', methods=['POST'])
 def get_vehicle():
     prediction = {}
     image_file = request.files['imageFile']

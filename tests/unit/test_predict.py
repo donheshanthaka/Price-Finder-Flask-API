@@ -12,13 +12,6 @@ def test_predict():
     assert vehicle == "Toyota Aqua 2014"
 
 
-def test_load_and_prep_image():
-    """
-    GIVEN a path to an image
-    WHEN trying to predict the imnage
-    THEN check the returned image tensor is in correct shape
-    """
-    img = helpers.reshape_image(image_path, scale=False)
-    assert img.shape == (224, 224, 3)
+
 
 

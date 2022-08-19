@@ -4,6 +4,7 @@ image_path = "tests/images/1.jpeg"
 invalid_image_path = "tests/images/dash.bmp"
 
 img = open(image_path, 'rb')
+invalid_img = open(invalid_image_path, 'rb')
 
 def test_get_vehicle():
     """
@@ -33,3 +34,17 @@ def test_get_vehicle_without_image():
     with flask_app.test_client() as test_client:
         response = test_client.post('/get-vehicle-info')
         assert response.status_code == 400
+
+
+def test_get_vehicle_invalid_image_type():
+    """
+    GIVEN a Flask application
+    WHEN the '/get-vehicle-info' is requested (POST) with an invalid image type
+    THEN check that a '415' status code is returned
+    """
+    flask_app = create_app()
+
+    # Create a test client using the FLask application
+    with flask_app.test_client() as test_client:
+        response = test_client.post('/get-vehicle-info', data = {'imageFile' : invalid_img})
+        assert response.status_code == 415

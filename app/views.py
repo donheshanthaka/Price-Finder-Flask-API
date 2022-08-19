@@ -9,20 +9,20 @@ from app.helpers import predict, get_price
 
 views = Blueprint("views", __name__)
 
-@views.route('/test', methods=['GET', 'POST'])
-def test():
-  print('Called')
-  try:
-    image_file = request.files['imageFile']
-  except KeyError:
-    raise error_handlers.ImageFileNotFound
-  image_type = secure_filename(image_file.filename).split('.')[1]
-  if (image_type != 'jpeg' and image_type != 'png'):
-    # Return a 415 (Unsupported Media Type) http status code
-    raise error_handlers.invalid_image_type
-      # return 'File type not supported!'
-  data = {"model": "Wagon R", "price": "Rs. 6,500,000"}
-  return jsonify(data)
+# @views.route('/test', methods=['GET', 'POST'])
+# def test():
+#   print('Called')
+#   try:
+#     image_file = request.files['imageFile']
+#   except KeyError:
+#     raise error_handlers.ImageFileNotFound
+#   image_type = secure_filename(image_file.filename).split('.')[1]
+#   if (image_type != 'jpeg' and image_type != 'png'):
+#     # Return a 415 (Unsupported Media Type) http status code
+#     raise error_handlers.invalid_image_type
+#       # return 'File type not supported!'
+#   data = {"model": "Wagon R", "price": "Rs. 6,500,000"}
+#   return jsonify(data)
 
 
 

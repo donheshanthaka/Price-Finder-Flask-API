@@ -15,7 +15,7 @@ def test():
   try:
     image_file = request.files['imageFile']
   except KeyError:
-    raise error_handlers.image_file_not_found
+    raise error_handlers.ImageFileNotFound
   image_type = secure_filename(image_file.filename).split('.')[1]
   if (image_type != 'jpeg' and image_type != 'png'):
     # Return a 415 (Unsupported Media Type) http status code
@@ -32,7 +32,7 @@ def get_vehicle():
     try:
       image_file = request.files['imageFile']
     except KeyError:
-      raise error_handlers.image_file_not_found
+      raise error_handlers.ImageFileNotFound
     image_type = secure_filename(image_file.filename).split('.')[1]
     if (image_type != 'jpeg' and image_type != 'png' and image_type != 'jpg'):
       # Return a 415 (Unsupported Media Type) http status code

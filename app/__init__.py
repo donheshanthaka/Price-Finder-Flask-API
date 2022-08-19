@@ -1,5 +1,6 @@
 from flask import Flask
 from app.views import views
+from app.error_handlers import error_handlers
 
 def create_app():
 
@@ -16,5 +17,6 @@ def create_app():
         app.config.from_object("config.ProductionConfig")
 
     app.register_blueprint(views)
+    app.register_blueprint(error_handlers)
 
     return app

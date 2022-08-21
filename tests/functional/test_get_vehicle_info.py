@@ -10,7 +10,7 @@ def test_get_vehicle(client):
     """
     GIVEN a Flask application
     WHEN the '/get-vehicle-info' is requested (POST)
-    THEN check that the response is valid
+    THEN check that a '200' response code is returned with valid response data
     """
     response = client.post('/get-vehicle-info', data = {'imageFile' : img})
     assert response.status_code == 200

@@ -1,8 +1,7 @@
 from app import helpers
 
-image_path = "tests/images/1.jpeg"
 
-def test_predict():
+def test_predict(image_path):
     """
     GIVEN a path to an image of a vehicle (Toyota Aqua)
     WHEN trying to identify the vehicle

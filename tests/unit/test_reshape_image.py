@@ -1,8 +1,7 @@
 from app import helpers
 
-image_path = "tests/images/1.jpeg"
 
-def test_reshape_image():
+def test_reshape_image(image_path):
     """
     GIVEN a path to an image
     WHEN trying to predict the imnage

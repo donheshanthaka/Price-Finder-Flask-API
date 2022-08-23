@@ -1,6 +1,7 @@
 import pytest
 from app import create_app
 
+
 @pytest.fixture
 def app():
     app = create_app()
@@ -19,10 +20,12 @@ def app():
 def client(app):
     return app.test_client()
 
+
 @pytest.fixture(scope="session")
 def image_path():
     path = "tests/images/1.jpeg"
     return path
+
 
 @pytest.fixture(scope="session")
 def invalid_image_path():

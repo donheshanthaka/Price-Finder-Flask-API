@@ -23,7 +23,7 @@ views = Blueprint('views', __name__)
 #   return jsonify(data)
 
 @views.route('/get-vehicle-info', methods=['POST'])
-def get_vehicle():
+def get_vehicle_info():
     """
     Reads and save the image recieved through the POST request and
     pass it to the predict function to identify the vehicle and then

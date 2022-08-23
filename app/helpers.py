@@ -1,93 +1,107 @@
 import tensorflow as tf
 import requests
 from bs4 import BeautifulSoup
-
 from app import error_handlers
 
-loaded_model_1 = tf.keras.models.load_model('model/feature_extraction_efficientnetB1')
-class_names = ['Alto 2015', 'Hero Dash 2016', 'Toyota Aqua 2014', 'Wagon R Stingray 2018']
+loaded_model_1 = tf.keras.models.load_model(
+    'model/feature_extraction_efficientnetB1')
+class_names = ['Alto 2015', 'Hero Dash 2016',
+               'Toyota Aqua 2014', 'Wagon R Stingray 2018']
 
 
 def predict(image_path):
+    """
+    Takes the image path and pass it to be reshaped using the reshape_image function and
+    make a prediction of the reshaped image using the AI model
+
+    Args:
+        image_path (str): path to the vehicle image
+
+    Returns:
+        String value of the predicted model
+    """
     img = reshape_image(image_path, scale=False)
     # make prediction on image with shape [1, 224, 224, 3] (same shape as model was trained on)
     pred_prob = loaded_model_1.predict(tf.expand_dims(img, axis=0), verbose=0)
     # get the index with the highet prediction probability
     pred_class = class_names[pred_prob.argmax()]
-    # classification = (f"pred: {pred_class}, prob: {pred_prob.max():.2f}")
 
     return pred_class
 
 
 def reshape_image(filename, img_shape=224, scale=True):
-  """
-  Reads in an image from filename, turns it into a tensor and reshapes into
-  specified shape (img_shape, img_shape, color_channels=3).
+    """
+    Reads in an image from filename, turns it into a tensor and reshapes into
+    specified shape (img_shape, img_shape, color_channels=3).
 
-  Args:
-    filename (str): path to target image
-    image_shape (int): height/width dimension of target image size
-    scale (bool): scale pixel values from 0-255 to 0-1 or not
-  
-  Returns:
-    Image tensor of shape (img_shape, img_shape, 3)
-  """
-  # Read in the image
-  img = tf.io.read_file(filename)
+    Args:
+      filename (str): path to target image
+      image_shape (int): height/width dimension of target image size
+      scale (bool): scale pixel values from 0-255 to 0-1 or not
 
-  # Decode image into tensor
-  img = tf.io.decode_image(img, channels=3)
-
-  # Resize the image
-  img = tf.image.resize(img, [img_shape, img_shape])
-
-  # Scale? Yes/no
-  if scale:
-    # rescale the image (get all values between 0 and 1)
-    return img/255.
-  else:
-    return img # don't need to rescale images for EfficientNet models in TensorFlow
+    Returns:
+      Image tensor of shape (img_shape, img_shape, 3)
+    """
+    img = tf.io.read_file(filename)
+    img = tf.io.decode_image(img, channels=3)
+    img = tf.image.resize(img, [img_shape, img_shape])
+    if scale:
+        # rescale the image (get all values between 0 and 1)
+        return img/255.
+    else:
+        return img  # don't need to rescale images for EfficientNet models in TensorFlow
 
 
+def get_price(predicted_vehicle_model):
+    """
+    Takes a string value of the predicted vehicle model and extract the model and year, then
+    the extracted values are passed through a web scraper
+    to find the current market price of the vehicle
 
-def get_price(pred):
-  prediction = pred
-  # Extract the model name from the prediction and add '%20' for the white spaces to be used in the url
-  model = '%20'.join([str(s) for s in prediction.split() if s.isalpha()])
-  # Extract the model year from the prediction
-  year = str([int(s) for s in prediction.split() if s.isdigit()][0])
+    Args:
+        predicted_vehicle_model (str): model and year of the predicted vehicle
 
-  url = f"https://ikman.lk/en/ads/sri-lanka/cars?sort=relevance&buy_now=0&urgent=0&query={model}&page=1&numeric.model_year.minimum={year}&numeric.model_year.maximum={year}"
+    Returns:
+        Formatted string value of the market price
+    """
+    vehicle_model = predicted_vehicle_model
+    # Extract the model name from the prediction and 
+    # add '%20' for the white spaces to be used in the url
+    model = '%20'.join([str(s) for s in vehicle_model.split() if s.isalpha()])
+    # Extract the model year from the prediction
+    year = str([int(s) for s in vehicle_model.split() if s.isdigit()][0])
 
-  try:
-    # Making a http request to get the required webpage
-    result = requests.get(url)
+    url = f"https://ikman.lk/en/ads/sri-lanka/cars?sort=relevance&buy_now=0&urgent=0&query={model}&page=1&numeric.model_year.minimum={year}&numeric.model_year.maximum={year}"
 
-    doc = BeautifulSoup(result.text, "html.parser")
+    try:
+        # Making a http request to get the required webpage
+        result = requests.get(url)
 
-    # Extracting the tag that contains the price details
-    # find_all returns a set of elements that contains all the prices from the page
-    tag = doc.find_all( class_ ="price--3SnqI color--t0tGX")
-    #print(len(tag))
+        doc = BeautifulSoup(result.text, "html.parser")
 
-    if (len(tag) < 1):
-      # Return a 204 (No Content) http status code
-      raise error_handlers.NoActiveListingsFound
+        # Extracting the tag that contains the price details
+        # find_all returns a set of elements that contains all the prices from the page
+        tag = doc.find_all(class_="price--3SnqI color--t0tGX")
 
-    # Iterates through the list of elements and extracting the price span tag
-    total_price = 0
-    for spans in tag:
-        extracted_price = spans.find("span").string
-        # Filtering the string to get the price in integer value
-        total_price += int(''.join(filter(str.isdigit, extracted_price)))
+        if (len(tag) < 1):
+            # Return a 204 (No Content) http status code
+            raise error_handlers.NoActiveListingsFound
 
-    average_price = total_price // len(tag)
-    average_price = "RS. " + "{:,}".format(average_price)
-    return average_price
-  # Return a 502 (Bad Gateway) http status code
-  except requests.exceptions.ConnectionError:
-    raise error_handlers.WebScraperUrlError
+        # Iterates through the list of elements and extracting the price span tag
+        total_price = 0
+        for spans in tag:
+            extracted_price = spans.find("span").string
+            # Filtering the string to get the price in integer value
+            total_price += int(''.join(filter(str.isdigit, extracted_price)))
 
-  # Return a 502 (Bad Gateway) http status code
-  except requests.exceptions.InvalidURL:
-    raise error_handlers.WebScraperUrlError
+        average_price = total_price // len(tag)
+        average_price = "RS. " + "{:,}".format(average_price)
+        return average_price
+
+    # Return a 502 (Bad Gateway) http status code
+    except requests.exceptions.ConnectionError:
+        raise error_handlers.WebScraperUrlError
+
+    # Return a 502 (Bad Gateway) http status code
+    except requests.exceptions.InvalidURL:
+        raise error_handlers.WebScraperUrlError

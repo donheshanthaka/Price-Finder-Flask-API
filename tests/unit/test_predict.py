@@ -9,8 +9,3 @@ def test_predict(image_path):
     """
     vehicle = utils.predict(image_path)
     assert vehicle == "Toyota Aqua 2014"
-
-
-
-
-

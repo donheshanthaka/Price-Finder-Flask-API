@@ -9,7 +9,7 @@ class NoActiveListingsFound(Exception):
 
 @error_handlers.app_errorhandler(NoActiveListingsFound)
 def no_active_listings_found(e):
-    """Return a 204 (No Content) http status code with the error message 
+    """Return a 204 (No Content) http status code with the error message
     (No active advertisements found for the current vehicle model)
     """
     return {'message': 'No active advertisements found for the current vehicle model'}, 204

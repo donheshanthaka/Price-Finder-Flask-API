@@ -1,6 +1,6 @@
 # .github/workflows/deploy.yml
 
-name: github actions test
+name: Google Cloud Project Deploy
 
 on:
   push:
@@ -27,7 +27,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       
-      # Configure Workload Identity Federation via a credentials file.
       - name: Authenticate to Google Cloud
         id: auth
         uses: google-github-actions/auth@v0
@@ -36,34 +35,16 @@ jobs:
           workload_identity_provider: '${{ secrets.WIF_PROVIDER }}' # e.g. - projects/123456789/locations/global/workloadIdentityPools/my-pool/providers/my-provider
           service_account: '${{ secrets.WIF_SERVICE_ACCOUNT }}' # e.g. - my-service-account@my-project.iam.gserviceaccount.com
 
-          # token_format: 'access_token'
-          # access_token_lifetime: '300s'
-
-      #- name: Set up Cloud SDK
-
-      # - id: 'gcloud'
-      # name: 'gcloud'
-      # run: |-
-      #   gcloud secrets versions access "latest" --secret "my-secret"
-
-      # Build and push image to Google Container Registry
-
-      - name: Setting up
+      - name: Set up gcloud
         uses: google-github-actions/setup-gcloud@v0
         with:
-          # version: '286.0.0'
-          # service_account_key: ${{ secrets.GCP_SA_KEY_JSON }}
-          # service_account_email: "github-test@test-deploy-355215.iam.gserviceaccount.com"
           project_id: ${{ env.PROJECT_ID }}
 
-      - name: Building
+      - name: Run Cloud Build
         run: |-
           gcloud builds submit
 
-
-      # Setup gcloud CLI
-
-      - name: Deploy
+      - name: Deploy to Cloud Run
 
         uses: google-github-actions/deploy-cloudrun@v0
 
@@ -71,6 +52,4 @@ jobs:
           service: ${{ env.SERVICE }}
           region: ${{ env.REGION }}
           image: gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}
-          #credentials: ${{ secrets.GCP_SA_KEY_JSON }}
-          #project_id: test-deploy-355215
-          # metadata: 'service.yaml'
+

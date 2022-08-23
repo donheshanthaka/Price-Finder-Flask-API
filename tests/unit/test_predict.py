@@ -1,4 +1,4 @@
-from app import helpers
+from app import utils
 
 
 def test_predict(image_path):
@@ -7,10 +7,5 @@ def test_predict(image_path):
     WHEN trying to identify the vehicle
     THEN check the identified vehicle is correct according to the given image
     """
-    vehicle = helpers.predict(image_path)
+    vehicle = utils.predict(image_path)
     assert vehicle == "Toyota Aqua 2014"
-
-
-
-
-

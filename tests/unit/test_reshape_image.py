@@ -1,4 +1,4 @@
-from app import helpers
+from app import utils
 
 
 def test_reshape_image(image_path):
@@ -7,5 +7,5 @@ def test_reshape_image(image_path):
     WHEN trying to predict the imnage
     THEN check the returned image tensor is in correct shape
     """
-    img = helpers.reshape_image(image_path, scale=False)
+    img = utils.reshape_image(image_path, scale=False)
     assert img.shape == (224, 224, 3)

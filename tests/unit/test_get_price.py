@@ -1,4 +1,4 @@
-from app import helpers
+from app import utils
 
 def test_get_price():
     """
@@ -8,5 +8,5 @@ def test_get_price():
     (cannot check for an exact value since market value is not constant, 
     therefore checking the return type is the only option available)
     """
-    price = helpers.get_price("Toyota Aqua 2014")
+    price = utils.get_price("Toyota Aqua 2014")
     assert type(price) == str

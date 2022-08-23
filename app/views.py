@@ -3,7 +3,7 @@ from werkzeug.utils import secure_filename
 import os
 import uuid
 from app import error_handlers
-from app.helpers import predict, get_price
+from app.utils import predict, get_price
 
 views = Blueprint('views', __name__)
 

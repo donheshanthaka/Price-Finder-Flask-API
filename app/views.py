@@ -22,6 +22,7 @@ views = Blueprint('views', __name__)
 #   data = {"model": "Wagon R", "price": "Rs. 6,500,000"}
 #   return jsonify(data)
 
+
 @views.route('/get-vehicle-info', methods=['POST'])
 def get_vehicle_info():
     """
@@ -34,17 +35,17 @@ def get_vehicle_info():
     """
     vehicle_info = {}
     try:
-      image_file = request.files['imageFile']
+        image_file = request.files['imageFile']
     except KeyError:
-      raise error_handlers.ImageFileNotFound
+        raise error_handlers.ImageFileNotFound
     image_type = secure_filename(image_file.filename).split('.')[1]
 
     if (image_type != 'jpeg' and image_type != 'png' and image_type != 'jpg'):
-      # Return a 415 (Unsupported Media Type) http status code
-      raise error_handlers.InvalidImageType
-    
+        # Return a 415 (Unsupported Media Type) http status code
+        raise error_handlers.InvalidImageType
+
     # Create a unique id for the filename
-    uid = str(uuid.uuid4())    
+    uid = str(uuid.uuid4())
     filename = uid + secure_filename(image_file.filename)
     image_path = './images/' + filename
     image_file.save(image_path)
@@ -54,5 +55,3 @@ def get_vehicle_info():
     vehicle_info['price'] = get_price(vehicle)
 
     return (vehicle_info)
-
-

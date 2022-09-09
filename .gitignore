@@ -1,6 +1,6 @@
 images/*
 !images/.gitkeep
-README.md
+README_test.md
 
 *.pyc
 *.pyo

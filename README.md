@@ -2,6 +2,16 @@
 # Price Finder API
 
 This project contains the Price Finder API developed and deployed to Google Cloud Platform (GCP) which facilitates the image recognition capabilities through a [vehicle image classification (CNN) model](https://github.com/donheshanthaka/Price-Finder-Deep-Learning-Model) and market price retrieval of the [Price Finder](https://github.com/donheshanthaka/Price-Finder-Flutter-APP) mobile application.
+
+## 🔬 Overview of the tasks achieved within this project
+
+* Intergration of Github Actions CI/CD pipeline for **automated deployment to GCP**.
+* **Automated tests using Github Actions**, which runs on every push to the `develop` branch.
+* **Code test coverage of 89%** which includes functional and unit tests.
+* **Modular project structure** to facilitate seamless scalablitiy with **flask blueprints** and **application factory pattern**.
+* Comprehensive exception handling to **gracefully handle exceptions** occured due to both client and server side issues.
+* Detailed explanation of the code functionality through Docstrings, comments and documentation.
+* Code standards maintained in accordance with **PEP8** style guide.
 ## 🧱 Tech Stack
 
 | Framework / Library   | Functionality                                       |
@@ -148,7 +158,33 @@ response = requests.request("POST", url, headers=headers, data=payload, files=fi
 print(response.text)
 ```
 
-## 🧪 Testing
+## 📃 Response Codes
+
+The HTTP Status Codes used by the Price Finder API.
+
+| **HTTP Status Code**       | **Description**                                                   |
+|----------------------------|-------------------------------------------------------------------|
+| 200 OK                     | Successfully identified the image and retrieved the market price. | 
+| 204 No Content             | No active advertisements found for the current vehicle model.     |
+| 400 Bad Request            | Image file not found in the request.                              |
+| 404 Not Found              | Resource not found.                                               |
+| 415 Unsupported Media Type | Invalid Image Type.                                               |
+| 502 Bad Gateway            | Unable to access price retrieval web server.                      |
+
+## 📇 API Reference
+
+Identify vehicle and retrieve current market price.
+
+```http
+  POST /get-vehicle-info
+```
+
+| Parameter   | Type         | Description                          |
+| :--------   | :-------     | :-------------------------           |
+| `imageFile` | `jpeg`/`png` | **Required**. Image to be identified |
+
+
+## 🧪 Test Cases
 
 The flask api is tested in both unit tests and functional tests using the [pytest](https://docs.pytest.org/en/7.1.x/contents.html) framework.
 
@@ -181,17 +217,6 @@ Tests the each individual functions used by the api, such as price retrieval, im
 **A code test coverage of 89% is achieved with the implementation of above test cases.**
 
 
-```
-Name                    Stmts   Miss  Cover
--------------------------------------------
-app\__init__.py            13      3    77%
-app\error_handlers.py      22      2    91%
-app\utils.py               40      6    85%
-app\views.py               26      0   100%
--------------------------------------------
-TOTAL                     101     11    89%
-
-```
 ## ⚗ Running Tests
 
 *Prerequisites:*
@@ -264,7 +289,7 @@ The API developed in this project is deployed in Google Cloud Platform (GCP) to 
 
 📌 *Note: You have to activate the billing feauture of the account by providing your credit / debit card details and it will charge you 1-2 USD to verify your account, but that amount will be refunded and you will not have to turn on billing for the project itself and therefore, **you will not be charged** for the usage during this project and everything will be under the [free usage limits.](https://cloud.google.com/free/docs/free-cloud-features) Moreover, you will recieve **300 USD free credits** valid for 3 months.*
 
-### Create new GCP project
+### ⚒ Create new GCP project
 
 **Step 01:**
 
@@ -284,13 +309,13 @@ Activate `Cloud Run` and `Cloud Build` API
 * Activate `Cloud Build` api with the same steps.
 
 
-### Install Google Cloud CLI
+### ☁ Install Google Cloud CLI
 
 **Step 01:**
 
 Download and install Google Cloud CLI using this [guide](https://cloud.google.com/sdk/docs/install) by Google and complete the installing and initializing sections.
 
-### Manual deployment to GCP
+### 👨‍💻 Manual deployment to GCP
 
 **Step 01:**
 
@@ -318,14 +343,14 @@ Deploying to Cloud Run
 
 After successful deployment, the **Service URL** will be displayed at the bottom of the terminal. Copy that for future use since that will be the api access point.
 
-### Deployment to GCP through Github Actions CI/CD pipleine
+### 🤖 Deployment to GCP through Github Actions CI/CD pipleine
 
-Before following the steps fork this repository to your own github account.
+**Before following the steps below, fork this repository to your own github account.**
 
-*Make sure to complete the sections mentioned below*
+*And then make sure to complete the sections mentioned below*
 
-* [Create new GCP project](#create-new-gcp-project)
-* [Install Google Cloud CLI](#install-google-cloud-cli)
+* [Create new GCP project](#-create-new-gcp-project)
+* [Install Google Cloud CLI](#-install-google-cloud-cli)
 
 
 **Step 01:**
@@ -518,32 +543,12 @@ Update the `main.yml` file in `.github\workflows` 'directory.
 📌 *Note: When replacing the service account, remove the `$` and curly brackets. Just include the value within single quotes.*
 
 
-## Response Codes
-## API Reference
+**Step 12:**
 
-#### Get all items
+* Switch to the `release` branch
+* Commit the new changes and push to the repository.
 
-```http
-  GET /api/items
-```
-
-| Parameter | Type     | Description                |
-| :-------- | :------- | :------------------------- |
-| `api_key` | `string` | **Required**. Your API key |
-
-#### Get item
-
-```http
-  GET /api/items/${id}
-```
-
-| Parameter | Type     | Description                       |
-| :-------- | :------- | :-------------------------------- |
-| `id`      | `string` | **Required**. Id of item to fetch |
-
-#### add(num1, num2)
-
-Takes two numbers and returns the sum.
+You will see the github actions running the workflow process under `Actions` tab in repository.
 
 
 ## Changelog

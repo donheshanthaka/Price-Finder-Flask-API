@@ -339,15 +339,183 @@ Create a Google Cloud Service Account.
 
 **Step 02:**
 
-Grant the Google Cloud Service Account permissions to access Google Cloud resources.
+Grant the Google Cloud Service Account permissions mentioned below to access Google Cloud resources.
 
-*Grant the below mentioned account permissions.
 
 * `Cloud Run Admin`
 * `Cloud Run Service Agent`
 * `Cloud Build Service Agent`
 * `Viewer`
 
+**Step 03:**
+
+Enable the IAM Credentials API.
+
+```bash
+    gcloud services enable iamcredentials.googleapis.com --project "{PROJECT-ID}"
+```
+
+**Step 04:**
+
+Create a Workload Identity Pool.
+
+Format:
+
+```bash
+gcloud iam workload-identity-pools create `"WORKLOAD-ID-POOL-NAME"` \
+  --project=`"PROJECT_ID"` \
+  --location="global" \
+  --display-name=`"DISPLAY_NAME_FOR_POOL"`
+```
+
+Example:
+
+```bash
+    gcloud iam workload-identity-pools create "price-finder-pool" --project "{PROJECT-ID}" --location="global" --display-name="price finder pool"
+```
+
+**Step 05:**
+
+Get the full ID of the Workload Identity Pool.
+
+Format:
+
+```bash
+gcloud iam workload-identity-pools describe `"WORKLOAD-ID-POOL-NAME"` \
+  --project=`"PROJECT_ID"` \
+  --location="global" \
+  --format="default"
+```
+
+Example:
+
+```bash
+    gcloud iam workload-identity-pools describe "price-finder-pool" --project "{PROJECT-ID}" --location="global" --format="default"
+```
+
+Return format:
+
+```bash
+    `WORKLOAD_IDENTITY_POOL_ID` = projects/`YOUR-PROJECT-NUMBER`/locations/global/workloadIdentityPools/`"WORKLOAD-ID-POOL-NAME"`
+```
+
+**Step 06:**
+
+Create a Workload Identity Provider in that pool.
+
+Format:
+
+```bash
+gcloud iam workload-identity-pools providers create-oidc `"WORKLOAD-ID-POOL-PROVIDER-NAME"` \
+  --project=`"PROJECT_ID"` \
+  --location="global" \
+  --workload-identity-pool=`"WORKLOAD-ID-POOL-NAME"` \
+  --display-name=`"DISPLAY_NAME_FOR_PROVIDER"` \
+  --attribute-mapping="google.subject=assertion.sub,attribute.actor=assertion.actor,attribute.repository=assertion.repository" \
+  --issuer-uri="https://token.actions.githubusercontent.com"
+```
+
+Example:
+
+```bash
+    gcloud iam workload-identity-pools providers create-oidc “price-finder-provider”  --project "{PROJECT-ID}" --location="global" --workload-identity-pool="price-finder-pool" --display-name="price finder provider" --attribute-mapping="google.subject=assertion.sub,attribute.actor=assertion.actor,attribute.repository=assertion.repository" --issuer-uri="https://token.actions.githubusercontent.com"
+```
+
+**Step 07:**
+
+Allow authentications from the Workload Identity Provider originating from your repository to impersonate the Service Account created above.
+
+Format:
+
+```bash
+gcloud iam service-accounts add-iam-policy-binding "my-service-account@${PROJECT_ID}.iam.gserviceaccount.com" \
+  --project=`"PROJECT_ID"` \
+  --role="roles/iam.workloadIdentityUser" \
+  --member="principalSet://iam.googleapis.com/`WORKLOAD_IDENTITY_POOL_ID( RETURN VALUE FROM STEP 5)`/attribute.repository/`yourgithubname/reponame`"
+```
+
+Example:
+
+```bash
+    gcloud iam service-accounts add-iam-policy-binding "test-service-account@{PROJECT-ID}.iam.gserviceaccount.com" --project "{PROJECT-ID}" --role="roles/iam.workloadIdentityUser" --member="principalSet://iam.googleapis.com/`WORKLOAD_IDENTITY_POOL_ID( RETURN VALUE FROM STEP 5)`/attribute.repository/`yourgithubname/reponame`"
+```
+
+**Step 08:**
+
+Extract the Workload Identity Provider resource name.
+
+Format:
+
+```bash 
+gcloud iam workload-identity-pools providers describe "my-provider" \
+  --project=`"PROJECT_ID"` \
+  --location="global" \
+  --workload-identity-pool=`"WORKLOAD-ID-POOL-NAME"` \
+  --format="default"
+```
+
+Example:
+
+```bash
+    gcloud iam workload-identity-pools providers describe "price-finder-provider" --project="{PROJECT-ID}" --location="global" --workload-identity-pool=“price-finder-pool” --format="default"
+```
+
+Return format:
+
+```bash 
+    projects/`YOUR-PROJECT-NUMBER`/locations/global/workloadIdentityPools/`WORKLOAD-ID-POOL-NAME`/providers/`WORKLOAD-ID-POOL-PROVIDER-NAME`
+```
+
+⭕ **Important**
+
+**YOU NEED TO USE THIS VALUE AS** "workload_identity_provider" in `main.yml` file, located in `.github\workflows` directory under **"Authenticate to Google Cloud"** section.
+
+📌 *Note: When replacing the workload_identity_provider, remove the `$` and curly brackets. Just include the value within single quotes.*
+
+
+**Step 09:**
+
+Making the service public (Allow unauthenticated).
+
+Format:
+
+```bash
+  gcloud run services add-iam-policy-binding [SERVICE_NAME] \
+    --member="allUsers" \
+    --role="roles/run.invoker" \
+    --project=`"PROJECT_ID"`
+```
+
+`SERVICE_NAME` = Name of the cloud run service
+
+Example:
+
+```bash
+    gcloud run services add-iam-policy-binding get-prediction --member="allUsers" --role="roles/run.invoker" --project="{PROJECT-ID}"
+```
+
+**Step 10:**
+
+Update the `cloudbuild.yaml` file with current project details.
+
+* Update the `PROJECT-ID` in the section below and replace the content in `cloudbuild.yaml` file in the project root directory.
+
+```bash
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/{PROJECT-ID}/get-prediction', '.']
+images: ['gcr.io/{PROJECT-ID}/get-prediction']
+```
+
+**Step 11:**
+
+Update the `main.yml` file in `.github\workflows` 'directory.
+
+* `PROJECT_ID` -> Replace with your own project id
+* `REGION` -> If necessary, replace it with a region suitable for you or keep as it is.
+* `service_account` -> Can be found under **IAM & Admin** > **Service accounts** (Example: my-service-account@my-project.iam.gserviceaccount.com)
+
+📌 *Note: When replacing the service account, remove the `$` and curly brackets. Just include the value within single quotes.*
 
 
 ## Response Codes

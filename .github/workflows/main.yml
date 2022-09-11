@@ -5,7 +5,7 @@ name: Google Cloud Project Deploy
 on:
   push:
     branches:
-      - main
+      - release
 
 env:
   PROJECT_ID: price-finder-test

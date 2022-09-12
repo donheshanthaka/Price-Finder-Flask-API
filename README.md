@@ -3,10 +3,16 @@
 
 This project contains the Price Finder API developed and deployed to Google Cloud Platform (GCP) which facilitates the image recognition capabilities through a [vehicle image classification (CNN) model](https://github.com/donheshanthaka/Price-Finder-Deep-Learning-Model) and market price retrieval of the [Price Finder](https://github.com/donheshanthaka/Price-Finder-Flutter-APP) mobile application.
 
+[![Python Versions](https://img.shields.io/badge/python-3.7_|_3.8_|_3.9_|3.10-blue?style=for-the-badge)](https://github.com/donheshanthaka/Price-Finder-Deep-Learning-Model/blob/main/LICENSE)
+[![Github Repo Size](https://img.shields.io/github/repo-size/donheshanthaka/Price-Finder-Flask-API?style=for-the-badge)](https://github.com/donheshanthaka/Price-Finder-Flask-API)
+[![GitHub LICENSE](https://img.shields.io/github/license/donheshanthaka/Price-Finder-Flask-API?style=for-the-badge)](https://github.com/donheshanthaka/Price-Finder-Flask-API/blob/main/LICENSE.md)
+[![GitHub Repo Stars](https://img.shields.io/github/stars/donheshanthaka/Price-Finder-Flask-API?style=for-the-badge)](https://github.com/donheshanthaka/Price-Finder-Flask-API)
+<!-- Pytest Coverage Comment:Begin -->
+<!-- Pytest Coverage Comment:End -->
 ## 🔬 Overview of the tasks achieved within this project
 
 * Intergration of Github Actions CI/CD pipeline for **automated deployment to GCP**.
-* **Automated tests using Github Actions**, which runs on every push to the `develop` branch.
+* **Automated tests using Github Actions**, which runs on every push to the develop branch.
 * **Code test coverage of 89%** which includes functional and unit tests.
 * **Modular project structure** to facilitate seamless scalablitiy with **flask blueprints** and **application factory pattern**.
 * Comprehensive exception handling to **gracefully handle exceptions** occured due to both client and server side issues.
@@ -551,4 +557,9 @@ Update the `main.yml` file in `.github\workflows` 'directory.
 You will see the github actions running the workflow process under `Actions` tab in repository.
 
 
-## Changelog
+## Related
+
+Here are some related projects
+
+[Awesome README](https://github.com/matiassingers/awesome-readme)
+

@@ -40,9 +40,8 @@ jobs:
         pytest --cov=./ \
               --junitxml=pytest.xml \
               --capture=tee-sys \
-              # --cov-report=term-missing:skip-covered \
+              --cov-report=term-missing:skip-covered \
               # tests/test_app.py | \
-              | \
         tee pytest-coverage.txt
     - name: Pytest coverage comment
       uses: MishaKav/pytest-coverage-comment@main

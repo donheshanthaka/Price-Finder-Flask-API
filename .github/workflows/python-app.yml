@@ -5,9 +5,9 @@ name: Flask application testing
 
 on:
   push:
-    branches: [ "develop" ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ "develop" ]
+    branches: [ "main" ]
 
 permissions:
   contents: read

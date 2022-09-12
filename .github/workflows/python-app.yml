@@ -36,13 +36,7 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test with pytest
       run: |
-        set -o pipefail
-        pytest --cov=./ \
-              --junitxml=pytest.xml \
-              --capture=tee-sys \
-              --cov-report=term-missing:skip-covered \
-              # tests/test_app.py | \
-        tee pytest-coverage.txt
+        pytest --junitxml=pytest.xml --cov-report=term-missing:skip-covered --cov=app tests/ | tee pytest-coverage.txt
     - name: Pytest coverage comment
       uses: MishaKav/pytest-coverage-comment@main
       with:

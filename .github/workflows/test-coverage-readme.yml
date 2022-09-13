@@ -1,9 +1,14 @@
 name: Update Coverage on Readme
 on:
   push:
-    branches: [ "develop" ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ "develop" ]
+    branches: [ "main" ]
+
+permissions:
+  contents: write
+  packages: write
+
 jobs:
   update-coverage-on-readme:
     runs-on: ubuntu-latest
@@ -18,12 +23,19 @@ jobs:
         id: extract_branch
 
       - name: Pytest coverage comment
-        if: ${{ github.ref == 'refs/heads/main' }}
+        if: ${{ github.ref == 'refs/heads/develop' }}
         id: coverageComment
         uses: MishaKav/pytest-coverage-comment@main
         with:
           hide-comment: true
-          pytest-coverage-path: ./data/pytest-coverage_4.txt
+          pytest-coverage-path: ./pytest-coverage.txt
+          hide-report: true
+
+      - name: Create Variable of Summary Report
+        id: summary_report
+        run: |
+          SUMMARY_REPORT=${{ steps.coverageComment.outputs.summaryReport }}
+          echo "::set-output name=content::$SUMMARY_REPORT"
 
       - name: Update Readme with Coverage Html
         if: ${{ github.ref == 'refs/heads/main' }}

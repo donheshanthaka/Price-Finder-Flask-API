@@ -23,7 +23,7 @@ jobs:
         id: extract_branch
 
       - name: Pytest coverage comment
-        if: ${{ github.ref == 'refs/heads/develop' }}
+        if: ${{ github.ref == 'refs/heads/main' }}
         id: coverageComment
         uses: MishaKav/pytest-coverage-comment@main
         with:

@@ -5,9 +5,9 @@ name: Flask application testing
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "develop" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "develop" ]
 
 permissions:
   contents: write
@@ -40,7 +40,7 @@ jobs:
         pytest --junitxml=pytest.xml --cov-report=term-missing:skip-covered --cov=app tests/ | tee ./pytest-coverage.txt
 
     # - name: Pytest coverage comment
-    #   uses: MishaKav/pytest-coverage-comment@main
+    #   uses: MishaKav/pytest-coverage-comment@develop
     #   with:
     #     pytest-coverage-path: ./pytest-coverage.txt
     #     junitxml-path: ./pytest.xml
@@ -50,9 +50,9 @@ jobs:
       id: extract_branch
 
     - name: Pytest coverage comment
-      if: ${{ github.ref == 'refs/heads/main' }}
+      if: ${{ github.ref == 'refs/heads/develop' }}
       id: coverageComment
-      uses: MishaKav/pytest-coverage-comment@main
+      uses: MishaKav/pytest-coverage-comment@develop
       with:
         hide-comment: true
         pytest-coverage-path: ./pytest-coverage.txt
@@ -65,12 +65,12 @@ jobs:
         echo "::set-output name=content::$SUMMARY_REPORT"
 
     - name: Update Readme with Coverage Html
-      if: ${{ github.ref == 'refs/heads/main' }}
+      if: ${{ github.ref == 'refs/heads/develop' }}
       run: |
         sed -i '/<!-- Pytest Coverage Comment:Begin -->/,/<!-- Pytest Coverage Comment:End -->/c\<!-- Pytest Coverage Comment:Begin -->\n\${{ steps.coverageComment.outputs.coverageHtml }}\n${{ steps.coverageComment.outputs.summaryReport }}\n<!-- Pytest Coverage Comment:End -->' ./README.md
 
     - name: Commit & Push changes to Readme
-      if: ${{ github.ref == 'refs/heads/main' }}
+      if: ${{ github.ref == 'refs/heads/develop' }}
       uses: actions-js/push@master
       with:
         message: Update coverage on Readme
@@ -91,21 +91,21 @@ jobs:
   #       id: extract_branch
 
   #     - name: Pytest coverage comment
-  #       if: ${{ github.ref == 'refs/heads/main' }}
+  #       if: ${{ github.ref == 'refs/heads/develop' }}
   #       id: coverageComment
-  #       uses: MishaKav/pytest-coverage-comment@main
+  #       uses: MishaKav/pytest-coverage-comment@develop
   #       with:
   #         hide-comment: true
   #         # pytest-coverage-path: ./pytest-coverage.txt
   #         pytest-coverage-path: ./pytest.xml
 
   #     - name: Update Readme with Coverage Html
-  #       if: ${{ github.ref == 'refs/heads/main' }}
+  #       if: ${{ github.ref == 'refs/heads/develop' }}
   #       run: |
   #         sed -i '/<!-- Pytest Coverage Comment:Begin -->/,/<!-- Pytest Coverage Comment:End -->/c\<!-- Pytest Coverage Comment:Begin -->\n\${{ steps.coverageComment.outputs.coverageHtml }}\n${{ steps.coverageComment.outputs.summaryReport }}\n<!-- Pytest Coverage Comment:End -->' ./README.md
 
   #     - name: Commit & Push changes to Readme
-  #       if: ${{ github.ref == 'refs/heads/main' }}
+  #       if: ${{ github.ref == 'refs/heads/develop' }}
   #       uses: actions-js/push@master
   #       with:
   #         message: Update coverage on Readme

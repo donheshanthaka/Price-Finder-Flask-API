@@ -1,0 +1,25 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.6, pytest-7.1.3, pluggy-1.0.0
+rootdir: /home/runner/work/Price-Finder-Flask-API/Price-Finder-Flask-API, configfile: pytest.ini
+plugins: cov-3.0.0
+collected 6 items
+
+tests/functional/test_get_vehicle_info.py ...                            [ 50%]
+tests/unit/test_get_price.py .                                           [ 66%]
+tests/unit/test_predict.py .                                             [ 83%]
+tests/unit/test_reshape_image.py .                                       [100%]
+
+- generated xml file: /home/runner/work/Price-Finder-Flask-API/Price-Finder-Flask-API/pytest.xml -
+
+---------- coverage: platform linux, python 3.10.6-final-0 -----------
+Name                    Stmts   Miss  Cover   Missing
+-----------------------------------------------------
+app/__init__.py            13      3    77%   13-17
+app/error_handlers.py      22      2    91%   15, 27
+app/utils.py               40      6    85%   50, 90, 104-109
+-----------------------------------------------------
+TOTAL                     101     11    89%
+
+1 file skipped due to complete coverage.
+
+============================== 6 passed in 5.29s ===============================

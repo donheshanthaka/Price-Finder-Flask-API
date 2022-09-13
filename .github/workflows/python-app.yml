@@ -58,6 +58,12 @@ jobs:
         pytest-coverage-path: ./pytest-coverage.txt
         hide-report: true
 
+    - name: Create Variable of Summary Report
+      id: summary_report
+      run: |
+        SUMMARY_REPORT=${{ steps.coverageComment.outputs.summaryReport }}
+        echo "::set-output name=content::$SUMMARY_REPORT"
+
     - name: Update Readme with Coverage Html
       if: ${{ github.ref == 'refs/heads/main' }}
       run: |

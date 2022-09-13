@@ -8,6 +8,10 @@ This project contains the Price Finder API developed and deployed to Google Clou
 [![GitHub LICENSE](https://img.shields.io/github/license/donheshanthaka/Price-Finder-Flask-API?style=for-the-badge)](https://github.com/donheshanthaka/Price-Finder-Flask-API/blob/main/LICENSE.md)
 [![GitHub Repo Stars](https://img.shields.io/github/stars/donheshanthaka/Price-Finder-Flask-API?style=for-the-badge)](https://github.com/donheshanthaka/Price-Finder-Flask-API)
 <!-- Pytest Coverage Comment:Begin -->
+<a href="https://github.com/donheshanthaka/Price-Finder-Flask-API/blob/main/README.md"><img alt="Coverage" src="https://img.shields.io/badge/Coverage-89%25-green.svg" /></a>
+"<a href="https://github.com/donheshanthaka/Price-Finder-Flask-API/blob/0fa66e051cc3412099abeba80b31fdf085b43530/README.md"><img alt="Coverage" src="https://img.shields.io/badge/Coverage-89%25-green.svg" /></a>
+
+"
 <!-- Pytest Coverage Comment:End -->
 
 ## 🔬 Overview of the tasks achieved within this project

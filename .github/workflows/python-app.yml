@@ -45,6 +45,10 @@ jobs:
     #     pytest-coverage-path: ./pytest-coverage.txt
     #     junitxml-path: ./pytest.xml
 
+    - name: Extract branch name
+      run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+      id: extract_branch
+
     - name: Pytest coverage comment
       if: ${{ github.ref == 'refs/heads/main' }}
       id: coverageComment

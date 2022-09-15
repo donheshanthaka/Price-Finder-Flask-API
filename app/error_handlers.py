@@ -49,3 +49,23 @@ def image_file_not_found(e):
     (Image file not found in the request)
     """
     return {'message': 'Image file not found in the request'}, 400
+
+
+class PageNotFound(Exception):
+    pass
+
+
+@error_handlers.app_errorhandler(404)
+def page_not_found(e):
+    """Return a 404 (Not Found) http status code with the error message
+    (Server cannot find the requested resource)
+    """
+    return {'message': 'The requested resource was not found'}, 404
+
+
+@error_handlers.app_errorhandler(405)
+def method_not_allowed(e):
+    """Return a 405 (Method Not Allowed) http status code with the error message
+    (The requested method is not allowed)
+    """
+    return {'message': 'The requested method is not allowed'}, 405

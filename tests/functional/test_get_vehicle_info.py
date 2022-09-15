@@ -15,7 +15,8 @@ def test_get_vehicle(client, image_path):
 def test_get_vehicle_without_image(client):
     """
     GIVEN a Flask application
-    WHEN the '/get-vehicle-info' is requested (POST) without an image attached in the body
+    WHEN the '/get-vehicle-info' is requested (POST),
+    without an image attached in the body
     THEN check that a '400' status code is returned
     """
     response = client.post('/get-vehicle-info')

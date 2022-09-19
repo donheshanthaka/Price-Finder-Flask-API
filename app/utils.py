@@ -49,13 +49,13 @@ def reshape_image(filename, img_shape=224, scale=True):
         # rescale the image (get all values between 0 and 1)
         return img/255.
     else:
-        return img  # don't need to rescale images for EfficientNet models in TensorFlow
+        return img  # don't need to rescale images for EfficientNet models
 
 
 def get_price(predicted_vehicle_model):
     """
-    Takes a string value of the predicted vehicle model and extract the model and year, then
-    the extracted values are passed through a web scraper
+    Takes a string value of the predicted vehicle model and extract the model
+    and year, then the extracted values are passed through a web scraper
     to find the current market price of the vehicle
 
     Args:
@@ -65,15 +65,27 @@ def get_price(predicted_vehicle_model):
         Formatted string value of the market price
     """
     vehicle_model = predicted_vehicle_model
+
+    cars_list = ['Alto 2015', 'Toyota Aqua 2014', 'Wagon R Stingray 2018']
+    bikes_list = ['Hero Dash 2016']
+
     # Extract the model name from the prediction and
     # add '%20' for the white spaces to be used in the url
     model = '%20'.join([str(s) for s in vehicle_model.split() if s.isalpha()])
     # Extract the model year from the prediction
     year = str([int(s) for s in vehicle_model.split() if s.isdigit()][0])
 
-    url = f"""https://ikman.lk/en/ads/sri-lanka/cars?sort=relevance&
-    buy_now=0&urgent=0&query={model}&page=1&numeric.model_year.minimum={year}
-    &numeric.model_year.maximum={year}"""
+    if (predicted_vehicle_model in cars_list):
+        url = f"""https://ikman.lk/en/ads/sri-lanka/cars?sort=relevance&
+            buy_now=0&urgent=0&query={model}&page=1&numeric.model_year.minimum={year}
+            &numeric.model_year.maximum={year}"""
+
+    elif (predicted_vehicle_model in bikes_list):
+        print(model)
+        print(year)
+        url = f"""https://ikman.lk/en/ads/sri-lanka/motorbikes-scooters?
+            sort=relevance&buy_now=0&urgent=0&query={model}&page=1&numeric.
+            model_year.minimum={year}&numeric.model_year.maximum={year}"""
 
     try:
         # Making a http request to get the required webpage
@@ -84,10 +96,9 @@ def get_price(predicted_vehicle_model):
         # Extracting the tag that contains the price details
         # find_all returns a set of elements that contains all the prices from the page
         tag = doc.find_all(class_="price--3SnqI color--t0tGX")
-
         if (len(tag) < 1):
             # Return a 204 (No Content) http status code
-            raise error_handlers.NoActiveListingsFound
+            raise error_handlers.ImageFileNotFound
 
         # Iterates through the list of elements and extracting the price span tag
         total_price = 0

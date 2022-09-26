@@ -18,7 +18,7 @@ This project contains the Price Finder API developed and deployed to Google Clou
 
 * Intergration of Github Actions CI/CD pipeline for **automated deployment to GCP**.
 * **Automated tests using Github Actions**, which runs on every push to the develop branch.
-* **Code test coverage of 90%** which includes functional and unit tests.
+* **Code test coverage of 89%** which includes functional and unit tests.
 * **Modular project structure** to facilitate seamless scalablitiy with **flask blueprints** and **application factory pattern**.
 * Comprehensive exception handling to **gracefully handle exceptions** occured due to both client and server side issues.
 * Detailed explanation of the code functionality through Docstrings, comments and documentation.
@@ -175,8 +175,7 @@ The HTTP Status Codes used by the Price Finder API.
 
 | **HTTP Status Code**       | **Description**                                                   |
 |----------------------------|-------------------------------------------------------------------|
-| 200 OK                     | Successfully identified the image and retrieved the market price. | 
-| 204 No Content             | No active advertisements found for the current vehicle model.     |
+| 200 OK                     | Successfully identified the image and retrieved the market price. |
 | 400 Bad Request            | Image file not found in the request.                              |
 | 404 Not Found              | The requested resource was not found.                             |
 | 405 Not Found              | The requested method is not allowed.                              |
@@ -230,7 +229,7 @@ Tests the each individual functions used by the api, such as price retrieval, im
 
 * `test_reshape_image` -> Given a path to an image, when trying to predict the image, then check the returned image tensor is in correct shape.
 
-**A code test coverage of 90% is achieved with the implementation of above test cases.**
+**A code test coverage of 89% is achieved with the implementation of above test cases.**
 
 
 ## ⚗ Running Tests
@@ -265,13 +264,13 @@ Tests the each individual functions used by the api, such as price retrieval, im
 platform win32 -- Python 3.9.5, pytest-7.1.2, pluggy-1.0.0
 collected 8 items
 
-tests\functional\test_get_vehicle_info.py ...                                                                                                                        
-tests\functional\test_status_codes.py ..                                                                                                                             
-tests\unit\test_get_price.py .                                                                                                                                       
-tests\unit\test_predict.py .                                                                                                                                         
-tests\unit\test_reshape_image.py .                                                                                                                                   
+tests\functional\test_get_vehicle_info.py ...                                                                                                            [ 37%]            
+tests\functional\test_status_codes.py ..                                                                                                                 [ 62%]      
+tests\unit\test_get_price.py .                                                                                                                           [ 75%]      
+tests\unit\test_predict.py .                                                                                                                             [ 87%]      
+tests\unit\test_reshape_image.py .                                                                                                                       [100%]      
 
-=====================================
+========================================================================================== 8 passed in 7.28s ======================================================== 
 ```
 
 **Step 03:**
@@ -288,11 +287,11 @@ tests\unit\test_reshape_image.py .
 Name                    Stmts   Miss  Cover
 -------------------------------------------
 app\__init__.py            13      3    77%
-app\error_handlers.py      30      2    93%
-app\utils.py               40      6    85%
+app\error_handlers.py      25      1    96%
+app\utils.py               45      8    82%
 app\views.py               26      0   100%
 -------------------------------------------
-TOTAL                     109     11    90%
+TOTAL                     109     12    89%
 ```
 ## 🚀 Deployment (Google Cloud Platform)
 

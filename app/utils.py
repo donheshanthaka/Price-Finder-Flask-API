@@ -83,9 +83,7 @@ def get_price(predicted_vehicle_model):
     elif (predicted_vehicle_model in bikes_list):
         print(model)
         print(year)
-        url = f"""https://ikman.lk/en/ads/sri-lanka/motorbikes-scooters?
-            sort=relevance&buy_now=0&urgent=0&query={model}&page=1&numeric.
-            model_year.minimum={year}&numeric.model_year.maximum={year}"""
+        url = f"""https://ikman.lk/en/ads/sri-lanka/motorbikes-scooters?sort=relevance&buy_now=0&urgent=0&query={model}&page=1&numeric.model_year.minimum={year}&numeric.model_year.maximum={year}"""
 
     try:
         # Making a http request to get the required webpage
@@ -97,8 +95,7 @@ def get_price(predicted_vehicle_model):
         # find_all returns a set of elements that contains all the prices from the page
         tag = doc.find_all(class_="price--3SnqI color--t0tGX")
         if (len(tag) < 1):
-            # Return a 204 (No Content) http status code
-            raise error_handlers.ImageFileNotFound
+            return 'No active advertisements found to calculate the market price'
 
         # Iterates through the list of elements and extracting the price span tag
         total_price = 0

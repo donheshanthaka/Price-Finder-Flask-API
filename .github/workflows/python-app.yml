@@ -3,7 +3,7 @@
 
 name: Flask application testing
 
-on: [push, pull_request]
+on: push
 
 permissions:
   contents: write

@@ -11,7 +11,8 @@ class_names = ['Alto 2015', 'Hero Dash 2016',
 
 def predict(image_path):
     """
-    Takes the image path and pass it to be reshaped using the reshape_image function and
+    Takes the image path and pass it to be reshaped
+    using the reshape_image function and
     make a prediction of the reshaped image using the AI model
 
     Args:
@@ -21,7 +22,8 @@ def predict(image_path):
         String value of the predicted model
     """
     img = reshape_image(image_path, scale=False)
-    # make prediction on image with shape [1, 224, 224, 3] (same shape as model was trained on)
+    # make prediction on image with shape [1, 224, 224, 3]
+    # (same shape as model was trained on)
     pred_prob = loaded_model_1.predict(tf.expand_dims(img, axis=0), verbose=0)
     # get the index with the highet prediction probability
     pred_class = class_names[pred_prob.argmax()]
@@ -81,9 +83,7 @@ def get_price(predicted_vehicle_model):
             &numeric.model_year.maximum={year}"""
 
     elif (predicted_vehicle_model in bikes_list):
-        print(model)
-        print(year)
-        url = f"""https://ikman.lk/en/ads/sri-lanka/motorbikes-scooters?sort=relevance&buy_now=0&urgent=0&query={model}&page=1&numeric.model_year.minimum={year}&numeric.model_year.maximum={year}"""
+        url = f'https://ikman.lk/en/ads/sri-lanka/motorbikes-scooters?sort=relevance&buy_now=0&urgent=0&query={model}&page=1&numeric.model_year.minimum={year}&numeric.model_year.maximum={year}'
 
     try:
         # Making a http request to get the required webpage
@@ -92,12 +92,14 @@ def get_price(predicted_vehicle_model):
         doc = BeautifulSoup(result.text, "html.parser")
 
         # Extracting the tag that contains the price details
-        # find_all returns a set of elements that contains all the prices from the page
+        # find_all returns a set of elements that contains all the
+        # prices from the web page
         tag = doc.find_all(class_="price--3SnqI color--t0tGX")
         if (len(tag) < 1):
             return 'No active advertisements found to calculate the market price'
 
-        # Iterates through the list of elements and extracting the price span tag
+        # Iterates through the list of elements and extracting the
+        # price span tag
         total_price = 0
         for spans in tag:
             extracted_price = spans.find("span").string

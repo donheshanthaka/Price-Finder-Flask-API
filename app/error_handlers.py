@@ -3,20 +3,6 @@ from flask import Blueprint
 error_handlers = Blueprint('error_handlers', __name__)
 
 
-class NoActiveListingsFound(Exception):
-    pass
-
-
-@error_handlers.app_errorhandler(NoActiveListingsFound)
-def no_active_listings_found(e):
-    """Return a 204 (No Content)
-    http status code with the error message
-    (No active advertisements found for the current vehicle)
-    """
-    return {'message':
-            'No active advertisements found for the current vehicle'}, 204
-
-
 class WebScraperUrlError(Exception):
     pass
 

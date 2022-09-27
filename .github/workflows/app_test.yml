@@ -1,9 +1,9 @@
 # This workflow will install Python dependencies, run tests and lint with a single version of Python
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
 
-name: Flask application testing
+name: Application Testing
 
-on: push
+on: [push, pull_request]
 
 permissions:
   contents: write
@@ -41,26 +41,6 @@ jobs:
     - name: Test with pytest
       run: |
         pytest --junitxml=pytest.xml --cov-report=term-missing:skip-covered --cov=app tests/ | tee pytest-coverage.txt
-
-    # - name: Pytest coverage comment
-    #   if: ${{ github.ref == 'refs/heads/main' }}
-    #   id: coverageComment
-    #   uses: MishaKav/pytest-coverage-comment@main
-    #   with:
-    #     hide-comment: true
-    #     pytest-coverage-path: ./pytest-coverage.txt
-
-    # - name: Update Readme with Coverage Html
-    #   if: ${{ github.ref == 'refs/heads/main' }}
-    #   run: |
-    #     sed -i '/<!-- Pytest Coverage Comment:Begin -->/,/<!-- Pytest Coverage Comment:End -->/c\<!-- Pytest Coverage Comment:Begin -->\n\${{ steps.summary_report.outputs.content }}\n<!-- Pytest Coverage Comment:End -->' ./README.md
-
-    # - name: Commit & Push changes to Readme
-    #   if: ${{ github.ref == 'refs/heads/main' }}
-    #   uses: actions-js/push@master
-    #   with:
-    #     message: Update coverage on Readme
-    #     github_token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Pytest coverage comment
       if: ${{ github.ref == 'refs/heads/main' }}

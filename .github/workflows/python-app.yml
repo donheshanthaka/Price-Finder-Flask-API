@@ -48,7 +48,7 @@ jobs:
       uses: MishaKav/pytest-coverage-comment@main
       with:
         hide-comment: true
-        pytest-coverage-path: ./data/pytest-coverage.txt
+        pytest-coverage-path: ./pytest-coverage.txt
 
     - name: Update Readme with Coverage Html
       if: ${{ github.ref == 'refs/heads/main' }}

@@ -8,9 +8,6 @@ This project contains the Price Finder API developed and deployed to Google Clou
 [![GitHub LICENSE](https://img.shields.io/github/license/donheshanthaka/Price-Finder-Flask-API?style=for-the-badge)](https://github.com/donheshanthaka/Price-Finder-Flask-API/blob/main/LICENSE.md)
 [![GitHub Repo Stars](https://img.shields.io/github/stars/donheshanthaka/Price-Finder-Flask-API?style=for-the-badge)](https://github.com/donheshanthaka/Price-Finder-Flask-API)
 
-<!-- Pytest Coverage Comment:Begin -->
-<a href="https://github.com/donheshanthaka/Price-Finder-Flask-API/blob/main/README.md"><img alt="Coverage" src="https://img.shields.io/badge/Coverage-89%25-green.svg" /></a><details><summary>Coverage Report </summary><table><tr><th>File</th><th>Stmts</th><th>Miss</th><th>Cover</th><th>Missing</th></tr><tbody><tr><td colspan="5"><b>app</b></td></tr><tr><td>&nbsp; &nbsp;<a href="https://github.com/donheshanthaka/Price-Finder-Flask-API/blob/main/app/__init__.py">__init__.py</a></td><td>13</td><td>3</td><td>77%</td><td><a href="https://github.com/donheshanthaka/Price-Finder-Flask-API/blob/main/app/__init__.py#L13-L17">13&ndash;17</a></td></tr><tr><td>&nbsp; &nbsp;<a href="https://github.com/donheshanthaka/Price-Finder-Flask-API/blob/main/app/error_handlers.py">error_handlers.py</a></td><td>25</td><td>1</td><td>96%</td><td><a href="https://github.com/donheshanthaka/Price-Finder-Flask-API/blob/main/app/error_handlers.py#L16">16</a></td></tr><tr><td>&nbsp; &nbsp;<a href="https://github.com/donheshanthaka/Price-Finder-Flask-API/blob/main/app/utils.py">utils.py</a></td><td>45</td><td>8</td><td>82%</td><td><a href="https://github.com/donheshanthaka/Price-Finder-Flask-API/blob/main/app/utils.py#L52">52</a>, <a href="https://github.com/donheshanthaka/Price-Finder-Flask-API/blob/main/app/utils.py#L85-L86">85&ndash;86</a>, <a href="https://github.com/donheshanthaka/Price-Finder-Flask-API/blob/main/app/utils.py#L99">99</a>, <a href="https://github.com/donheshanthaka/Price-Finder-Flask-API/blob/main/app/utils.py#L114-L119">114&ndash;119</a></td></tr><tr><td><b>TOTAL</b></td><td><b>109</b></td><td><b>12</b></td><td><b>89%</b></td><td>&nbsp;</td></tr></tbody></table></details>
-<!-- Pytest Coverage Comment:End -->
 
 ## 🔬 Overview of the tasks achieved within this project
 
@@ -195,6 +192,10 @@ Identify vehicle and retrieve current market price.
 
 ## 🧪 Test Cases
 
+<!-- Pytest Coverage Comment:Begin -->
+
+<!-- Pytest Coverage Comment:End -->
+
 The flask api is tested in both unit tests and functional tests using the [pytest](https://docs.pytest.org/en/7.1.x/contents.html) framework.
 
 ### Overview of the testing criteria
@@ -258,17 +259,17 @@ Tests the each individual functions used by the api, such as price retrieval, im
 **output:**
 
 ```
-========================================================================================= test session starts =======================================================
+================================== test session starts =========================================
 platform win32 -- Python 3.9.5, pytest-7.1.2, pluggy-1.0.0
 collected 8 items
 
-tests\functional\test_get_vehicle_info.py ...                                                                                                            [ 37%]            
-tests\functional\test_status_codes.py ..                                                                                                                 [ 62%]      
-tests\unit\test_get_price.py .                                                                                                                           [ 75%]      
-tests\unit\test_predict.py .                                                                                                                             [ 87%]      
-tests\unit\test_reshape_image.py .                                                                                                                       [100%]      
+tests\functional\test_get_vehicle_info.py ...                                             [ 37%]            
+tests\functional\test_status_codes.py ..                                                  [ 62%]      
+tests\unit\test_get_price.py .                                                            [ 75%]      
+tests\unit\test_predict.py .                                                              [ 87%]      
+tests\unit\test_reshape_image.py .                                                        [100%]      
 
-========================================================================================== 8 passed in 7.28s ======================================================== 
+================================== 8 passed in 7.28s ============================================
 ```
 
 **Step 03:**

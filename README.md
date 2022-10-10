@@ -1,13 +1,12 @@
 
 # Price Finder API
 
-This project contains the Price Finder API developed and deployed to Google Cloud Platform (GCP) which facilitates the image recognition capabilities through a [vehicle image classification (CNN) model](https://github.com/donheshanthaka/Price-Finder-Deep-Learning-Model) and market price retrieval of the [Price Finder](https://github.com/donheshanthaka/Price-Finder-Flutter-APP) mobile application.
-
 [![Python Versions](https://img.shields.io/badge/python-3.7_|_3.8_|_3.9_|3.10-blue?style=for-the-badge)](https://github.com/donheshanthaka/Price-Finder-Deep-Learning-Model/blob/main/LICENSE)
 [![Github Repo Size](https://img.shields.io/github/repo-size/donheshanthaka/Price-Finder-Flask-API?style=for-the-badge)](https://github.com/donheshanthaka/Price-Finder-Flask-API)
 [![GitHub LICENSE](https://img.shields.io/github/license/donheshanthaka/Price-Finder-Flask-API?style=for-the-badge)](https://github.com/donheshanthaka/Price-Finder-Flask-API/blob/main/LICENSE.md)
 [![GitHub Repo Stars](https://img.shields.io/github/stars/donheshanthaka/Price-Finder-Flask-API?style=for-the-badge)](https://github.com/donheshanthaka/Price-Finder-Flask-API)
 
+This project contains the Price Finder API developed and deployed to Google Cloud Platform (GCP) which facilitates the image recognition capabilities through a [vehicle image classification (CNN) model](https://github.com/donheshanthaka/Price-Finder-Deep-Learning-Model) and market price retrieval of the [Price Finder](https://github.com/donheshanthaka/Price-Finder-Flutter-APP) mobile application.
 
 ## 🔬 Overview of the tasks achieved within this project
 
